@@ -4,7 +4,7 @@
 > Đầu mỗi mục ghi bước guide (`02-guide.md` trong repo đề) chỉ cách điền. Mỗi mục ngắn, có số và nguồn; chi tiết để ở file được trỏ tới. Xoá dòng hướng dẫn trong ngoặc vuông khi điền xong.
 
 Track: [x] A · [ ] B · [ ] C · [ ] D · [ ] E — bài toán: A1 · Tutor cho LMS và trang pre-class — tối ưu một điểm trợ giảng Snoop đang làm chưa tốt
-Data BTC cấp đã dùng (nếu có — không commit nguyên file): __
+Data BTC cấp đã dùng (nếu có — không commit nguyên file): `data/preclass/chat.csv` + `answers.csv` (05–25/11/2026) — cách đếm và số ở `evidence/data-mining.md`, script `evidence/count.py`
 
 ## §0. Hiện tại việc này diễn ra thế nào *(guide 1.1)*
 - Luồng hiện tại của việc này, trong khoá hoặc trên app thật (3–5 bước; ảnh chụp từ tài khoản của mình, đã che thông tin):
@@ -17,23 +17,27 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): __
 - Công cụ / AI đang được dùng cho việc này (nếu có) + nguồn. Không kiểm được thì ghi "chưa kiểm": trợ giảng Snoop trên preclass-online.com (chat "Trao đổi" + "Sổ hiểu bài"), đã kiểm bằng dùng thử trực tiếp 27/11. Model và prompt bên dưới: chưa kiểm.
 
 ## §1. Người dùng & bằng chứng *(guide 1.1, 1.2)*
-- Người dùng chính (một vai cụ thể):
-- Việc họ cố làm xong (`động từ + đối tượng + bối cảnh`, không có chữ AI):
-- Hôm nay họ giải bằng gì, hỏng ở đâu, vì sao chưa bỏ:
-- Pain (KHÔNG chữ AI): ai — đang làm gì — vướng đâu — hậu quả gì:
-- Bằng chứng — số chính + kết luận (chi tiết: `evidence/snoop-observation.md`): test trên Snoop thật — 4/4 lượt "chưa hiểu" bị hỏi ngược thay vì giảng lại; 4/4 lần giảng lại quay về ví dụ của bài (2 người thử, 2 bài, 3 chủ đề). Độ phổ biến trong học viên: __ (phỏng vấn x/n · `chat.csv` x/N — đang làm)
+- Người dùng chính (một vai cụ thể): học viên AI20K (lớp L3) đang tự học bài pre-class trước buổi lab, hỏi trợ giảng dưới video về một khái niệm mới (vd few-shot, attention) và chưa hiểu sau lần giải thích đầu.
+- Việc họ cố làm xong (`động từ + đối tượng + bối cảnh`, không có chữ AI): hiểu một khái niệm trong video bài học trước buổi lab, ngay tại đoạn video đang xem.
+- Hôm nay họ giải bằng gì, hỏng ở đâu, vì sao chưa bỏ: hỏi trợ giảng Snoop dưới video. Khi nói "vẫn chưa hiểu", họ bị hỏi ngược "chưa hiểu chỗ nào" hoặc nhận lại đúng ví dụ của bài. Chưa bỏ vì Snoop gắn sẵn với video, có mốc thời gian và mã bài. Khi không được, họ diễn đạt lại (9/15 khảo sát) hoặc mở ChatGPT/Gemini (7/15).
+- Pain (KHÔNG chữ AI): học viên AI20K — đang tự học một khái niệm trong video pre-class — vừa được giải thích mà vẫn chưa hiểu, nhưng lại bị hỏi ngược "chưa hiểu chỗ nào" trong khi chính họ không biết mình vướng ở đâu — nên phải tự diễn đạt lại câu hỏi, bỏ sang công cụ khác, hoặc mang lỗ hổng kiến thức vào buổi lab.
+- Bằng chứng — số chính + kết luận (chi tiết: `evidence/summary.md`):
+  - **Data BTC** (`chat.csv`, 05–25/11, 1.090 lượt hỏi trợ giảng dưới video): hỏi lại trong ≤5 phút sau câu trả lời trước, cùng video, là **513/1.090 (47,1%)**; trong đó nhắn tiếp ngắn ≤30 ký tự là **118/1.090 (10,8%)**, vượt ngưỡng giả thuyết 10% nhưng sát ngưỡng; **94/143 học viên (65,7%)** có ít nhất 1 lần hỏi lại. Kết luận giữ nguyên với cửa sổ 2 phút (40,2%) và 10 phút (50,3%).
+  - **Khảo sát** n = 15 (bằng chứng phụ, chưa đạt ngưỡng 20): 11/15 nhờ Snoop giảng lại đoạn chưa hiểu; 11/15 gặp trả lời không đúng ý ≥1 lần trong buổi gần nhất; 7/15 gặp "trả lời chung chung, lặp lại lời giảng".
+  - **Test Snoop thật** (`evidence/snoop-observation.md`): 4/4 lượt "chưa hiểu" bị hỏi ngược; 4/4 lần giảng lại quay về ví dụ của bài.
+  - **Giới hạn:** log không có câu chữ, nên "hỏi lại" là số gián tiếp (có thể là ý mới). Lỗi phổ biến nhất trong khảo sát là nhầm câu hỏi kiến thức thành quiz (9/15), lát cắt này không xử lý lỗi đó.
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
 | Hướng | Bao nhiêu người gặp | Bao nhiêu lần / tháng | Mỗi lần tốn gì | Impact / tháng | Làm kịp không | Chọn? |
 |---|---|---|---|---|---|---|
-| **1. Giải thích lại khi học viên nói "chưa hiểu"** (neo câu hỏi gần nhất, đổi cách giảng) | __ *(phỏng vấn / chat.csv)* | __ | __ phút tự tìm cách hỏi lại / bỏ hỏi | __ | Có — 1 quyết định AI, test được bằng câu thử nhiều lượt | ✅ |
-| 2. Công nhận câu đúng nhưng khác cách bài giảng nói / trả lời kiến thức đúng ngoài bài | __ | __ | Bị chấm sai, mất niềm tin | __ | Khó — cần nguồn kiến thức ngoài bài để kiểm đúng sai | ❌ |
-| 3. Chấm nhất quán giữa chat và Sổ hiểu bài | __ | __ | Không biết tin kết quả nào | __ | Khó — cần nhiều lần chạy để đo, chạm vào hệ chấm điểm | ❌ |
+| **1. Giải thích lại khi học viên nói "chưa hiểu"** (neo câu hỏi gần nhất, đổi cách giảng) | 94/143 học viên đã hỏi trợ giảng (65,7%) *(chat.csv)* | ≈169 lượt nhắn tiếp ngắn/tháng (118 lượt trong 21 ngày × 30/21) · cận trên ≈733 lượt hỏi lại/tháng (513 × 30/21) | ~4 phút tự diễn đạt lại / tua video / mở công cụ khác *(tự ước tính)* | ≈11 giờ/tháng (cận dưới) · ≈49 giờ/tháng (cận trên) | Có — 1 quyết định AI, test được bằng câu thử nhiều lượt | ✅ |
+| 2. Công nhận câu đúng nhưng khác cách bài giảng nói / trả lời kiến thức đúng ngoài bài | 6/13 người đã dùng Sổ hiểu bài từng bị bắt sửa dù hiểu đúng; 4/15 bị từ chối vì "ngoài bài" *(khảo sát n=15)* | chưa đo | Bị chấm sai, mất niềm tin | chưa tính được — thiếu số lần/tháng | Khó — cần nguồn kiến thức ngoài bài để kiểm đúng sai | ❌ |
+| 3. Chấm nhất quán giữa chat và Sổ hiểu bài | 7/13 thấy nhận xét "lúc đúng lúc không" *(khảo sát n=15)* | chưa đo | Không biết tin kết quả nào | chưa tính được — thiếu số lần/tháng | Khó — cần nhiều lần chạy để đo, chạm vào hệ chấm điểm | ❌ |
 
-- **Impact / tháng** của hướng chọn = __ người × __ lần × __ phút = __ — nguồn từng thừa số: __ (không có nguồn thì ghi rõ *(tự ước tính)*)
+- **Impact / tháng** của hướng chọn = 94 người × ≈1,8 lần × ~4 phút ≈ **169 lượt × 4 phút ≈ 11 giờ/tháng** (cận dưới, chỉ tính lượt nhắn tiếp ngắn) — cận trên nếu mọi lượt hỏi lại đều là "chưa hiểu": 733 × 4 ≈ 49 giờ/tháng. Nguồn từng thừa số: số người và số lần lấy từ `chat.csv` (`evidence/data-mining.md`, quy đổi 21 ngày → 30 ngày); **số phút mỗi lần là *(tự ước tính)*** vì không nguồn nào đo. Phạm vi: chỉ 143 người đã hỏi trợ giảng trong data; người chưa hiểu mà bỏ đi không để lại dấu, nên số thật có thể cao hơn.
 - Hướng ĐÃ LOẠI + vì sao (giữ lại, đừng xoá): hướng 2 và 3 có bằng chứng (`evidence/snoop-observation.md` mục 7) nhưng mỗi hướng là một quyết định AI riêng, chạm vào chấm điểm (sai thì đắt, cần người duyệt) và cần nguồn kiến thức ngoài bài — không làm trọn kịp trong ~10 giờ. Hướng 1 là chỗ cả 2 người thử cùng gặp, nhỏ, đo được.
-- Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8):
+- Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8): trung bình 1.090 lượt / 143 người trong 21 ngày ≈ **7,6 lượt/người ≈ 11 lượt/người/tháng** *(chat.csv, quy đổi)*. Tách theo khảo sát (n=15, số lần nhắn trong buổi gần nhất): hỏi nhiều (>5 lần/buổi) 6/15 · hỏi vừa (1–5 lần/buổi) 7/15 · không hỏi 2/15. Số lần/tháng của từng nhóm chưa đo, nên §8 dùng mức trung bình và ghi *(tự ước tính)* nếu tách nhóm.
 
 ## §3. Giải pháp tương tự *(guide 2.1)*
 - **Trợ giảng Snoop (preclass-online.com)**: đáng học — câu trả lời đầu đúng, gọn, luôn kèm mốc video; đổi được ví dụ khi được yêu cầu cụ thể · đáng né — hỏi ngược "chưa hiểu chỗ nào", liệt kê cả phiên, giảng lại bằng đúng câu chữ của bài · mình khác — mặc định neo câu hỏi gần nhất và **tự** đổi cách giảng, vẫn giữ mốc video / mã đoạn để kiểm lại
