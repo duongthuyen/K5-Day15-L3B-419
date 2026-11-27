@@ -15,6 +15,8 @@ for _stream in (sys.stdout, sys.stderr, sys.stdin):
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
+MAX_TURNS = 8   # giữ tối đa 8 lượt gần nhất (4 cặp hỏi–đáp) khi ghép hội thoại gửi vào answer()
+
 
 def _where(e):
     """File (trong codebase/) gây lỗi khi nạp: SyntaxError có e.filename, lỗi khác lấy khung cuối của traceback."""
@@ -35,7 +37,9 @@ def main() -> int:
         print("Sửa lỗi rồi chạy lại. Cách nối model: docs/connect-model.md")
         return 1
     print("Bản chạy thử — gõ đầu vào rồi Enter. Thoát: Ctrl+C (hoặc Enter 2 lần với dòng trống).")
+    print("Các lượt trong phiên được ghép thành hội thoại [HV] … [Trợ lý] … gửi vào answer(). Gõ /moi để bắt đầu phiên mới.")
     blank = 0
+    history = []   # các lượt của phiên hiện tại: "[HV] …", "[Trợ lý] …"
     while True:
         try:
             text = input("> ").strip()
@@ -48,9 +52,19 @@ def main() -> int:
                 return 0
             continue
         blank = 0
+        if text.lower() in ("/moi", "/mới", "/new", "/reset"):
+            history = []
+            print("   (đã bắt đầu phiên mới)")
+            continue
+        # Người dùng tự gõ cả hội thoại có thẻ → gửi nguyên văn; không thì ghép với lịch sử phiên.
+        if "[HV]" in text or "[Trợ lý]" in text:
+            dialog, turns = text, None
+        else:
+            turns = (history + ["[HV] " + text])[-MAX_TURNS:]
+            dialog = " ".join(turns)
         tracing.begin("app")
         try:
-            result = answer(text)
+            result = answer(dialog)
         except NotImplementedError as e:
             tracing.end()
             print("Chưa nối model: %s" % e)
@@ -60,7 +74,10 @@ def main() -> int:
             print("[lỗi] %s: %s" % (type(e).__name__, e))
             continue
         s, _ = tracing.end()
-        print(result.get("output", "") if isinstance(result, dict) else result)
+        output = result.get("output", "") if isinstance(result, dict) else result
+        if turns is not None:
+            history = (turns + ["[Trợ lý] " + " ".join(str(output).split())])[-MAX_TURNS:]
+        print(output)
         print("   (model: %s · gọi model %d lần · công cụ %d lần · token vào %d / ra %d)"
               % (", ".join(s["models"]) or "—", s["model_calls"], s["tool_calls"], s["tokens_in"], s["tokens_out"]))
 

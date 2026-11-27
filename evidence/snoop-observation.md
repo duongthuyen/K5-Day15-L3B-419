@@ -97,10 +97,19 @@ Người thử B ghi nhận thêm các lỗi sau (chi tiết ở Phụ lục B):
 - Ảnh chụp màn hình chưa đính kèm.
 - Hội thoại nguyên văn ở chủ đề system prompt chưa được ghi lại.
 
+**Giả thuyết cần kiểm** (chi tiết và ngưỡng ở [`hypothesis.md`](hypothesis.md), viết 27/11/2026 18:25, trước khi phỏng vấn và đếm log)
+
+> Học viên L3 tự học một khái niệm mới trên trang pre-class mà lần giải thích đầu chưa đủ để hiểu sẽ không được điều chỉnh cách giải thích theo mình, nên bỏ qua chỗ chưa hiểu hoặc phải tìm nguồn khác.
+
+| Nguồn | Giả thuyết đúng nếu |
+|---|---|
+| Phỏng vấn ≥3 học viên | ≥2/3 kể được ít nhất một lần trong 1 tháng qua đã nhắn "chưa hiểu" với trợ giảng, và ≥2/3 trong số đó nói lần giải thích sau không giúp |
+| `data/preclass/chat.csv` | ≥10% lượt hỏi trợ giảng dưới video là câu nhắn tiếp ngắn (cùng học viên, cùng bài, trong 5 phút, ≤30 ký tự) |
+
 **Bước tiếp theo**
 - Chạy lại mỗi case 3–5 lần để đo tỉ lệ.
 - Phỏng vấn và khảo sát học viên: đã từng nói "chưa hiểu" với Snoop chưa, Snoop phản hồi thế nào, sau đó làm gì.
-- Đếm trên log chat (`data/preclass/chat.csv`) số lượt học viên nhắn tiếp liền nhau trong cùng một bài.
+- Đếm trên log chat (`data/preclass/chat.csv`) theo quy tắc ở trên; ghi cách đếm trước khi chạy.
 
 ---
 
