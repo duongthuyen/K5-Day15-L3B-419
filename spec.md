@@ -30,32 +30,63 @@ Data BTC cấp đã dùng (nếu có — không commit nguyên file): __
 - Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8):
 
 ## §3. Giải pháp tương tự *(guide 2.1)*
-- [sản phẩm / tính năng gần giống]: một điều đáng học · một điều đáng né · mình khác gì
+- **NotebookLM (Google)** — hỏi đáp trên tài liệu mình nạp vào: **đáng học** là câu trả lời có trích dẫn trỏ về đúng đoạn nguồn, bấm vào xem được · **đáng né** là học viên phải tự tải tài liệu lên, mà lời bài pre-class không có sẵn dạng văn bản · **mình khác**: nguồn là đoạn bài đã chép sẵn của khoá, mã đoạn kèm mốc video để tua lại; ngoài bài thì chỉ sang TA, không trả lời chung chung.
+- **Khanmigo (Khan Academy)** — trợ lý học tập trong khoá học: **đáng học** là không đưa đáp án làm hộ, kéo học viên về chỗ đang vướng · **đáng né** là hỏi gợi mở nhiều lượt, tốn thời gian của người đi làm chỉ muốn tra nhanh một ý · **mình khác**: trả lời 1 lượt, ≤5 câu, chỉ trong phạm vi đoạn trích; từ chối làm hộ ngay ở bước chặn sớm.
+- **ChatGPT / chatbot chung** (học viên đang tự dùng khi chưa hỏi TA) — **đáng học** là trả lời ngay, không phải chờ · **đáng né** là trả lời bằng kiến thức ngoài, có thể lệch với cách giảng trong bài, không chỉ ra đoạn nào trong video · **mình khác**: chỉ dùng căn cứ từ `data/lessons.csv`, mã đoạn bị kiểm bằng `check_output`, không có căn cứ thì nói thẳng *(chưa kiểm số học viên dùng ChatGPT — Phương hỏi thêm trong phỏng vấn / khảo sát)*.
 
 ## §4. Thiết kế *(guide 2.2, 3.2)*
-- **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả):
+- **Lát cắt MỘT CÂU** (1 người dùng · 1 việc · 1 quyết định AI · 1 kết quả): Một học viên L3 đi làm, tối xem video pre-class · hỏi một câu về chỗ chưa hiểu · AI quyết định **trả lời kèm mã đoạn trong bài** hay **nói "không có trong bài"** · học viên mở đúng đoạn/mốc video đó để tự kiểm, không phải tua lại cả video.
 - Không làm (≥3 điều):
-- **Sơ đồ** (ảnh / Mermaid / draw.io): [chèn ở đây]
-- **Hình dạng:** [ ] workflow cố định · [ ] một agent · [ ] nhiều agent — 2 dòng lý do, và vì sao **không** chọn hình dạng phức tạp hơn:
+  1. Không trả lời bằng kiến thức ngoài bài pre-class (không có căn cứ trong `data/lessons.csv` → nói không có, chỉ sang TA).
+  2. Không làm hộ bài tập / quiz / lab, không viết lời giải để nộp.
+  3. Không nhớ hội thoại nhiều lượt, không cá nhân hoá theo học viên (mỗi câu hỏi xử lý độc lập).
+  4. Không gửi tin cho TA, không chấm điểm, không ghi gì vào hệ thống của khoá — chỉ đọc.
+  5. Không xử lý câu hỏi về lịch học, điểm danh, phần thưởng (data `training-ops`, `rewards` để ngoài lát cắt).
+- **Sơ đồ** (Mermaid — khớp từng bước trong `codebase/agent.py`):
+
+```mermaid
+flowchart TD
+    U(["Học viên L3 gõ câu hỏi<br/>khi đang xem video"]) --> A["answer(text)<br/>codebase/agent.py"]
+    A --> P{"Bước 0 · Chặn sớm<br/>check_input"}
+    P -- "rỗng / quá ngắn" --> R0[/"Hỏi lại: bài nào, vướng ý nào"/]
+    P -- "prompt injection" --> R1[/"Từ chối + chỉ nói về bài học"/]
+    P -- "nhờ làm hộ bài" --> R2[/"Từ chối + gợi ý hỏi phần đang vướng"/]
+    P -- "hợp lệ" --> S["Bước 1 · search_lesson(text)<br/>đọc data/lessons.csv"]
+    S --> C{"Có đoạn bài<br/>liên quan?"}
+    C -- "không" --> NF[/"Phần này không có trong bài,<br/>bạn hỏi TA nhé."/]
+    C -- "có ≤4 đoạn + mã DNN-VNN-NN" --> M["Bước 2 · call_model<br/>SYSTEM + căn cứ + câu hỏi"]
+    M --> K{"Bước 3 · check_output<br/>mã đoạn trích có nằm trong căn cứ?"}
+    K -- "đạt" --> OK[/"Trả lời ngắn + [D05-V02-03]<br/>+ mốc video để tua lại"/]
+    K -- "trượt, còn lượt<br/>(tối đa 2 lần gọi)" --> M
+    K -- "trượt, hết lượt" --> NF
+    NF -.-> TA([Học viên hỏi TA như hiện nay])
+```
+
+- **Hình dạng:** [x] workflow cố định · [ ] một agent · [ ] nhiều agent — Việc chỉ có một chuỗi bước cố định (tra đoạn → trả lời → kiểm mã đoạn), không cần AI tự chọn bước tiếp; workflow cố định dễ kiểm, dễ đọc trace và chi phí ổn định (1–2 lần gọi model / câu). **Không** chọn agent vì chỉ có một công cụ tra cứu — để AI tự quyết gọi công cụ chỉ thêm rủi ro bỏ qua bước tra và trả lời bằng kiến thức ngoài bài; không chọn nhiều agent vì không có việc con nào cần tách vai.
 - **AI dựa vào đâu** — mỗi công cụ (khớp `codebase/tools.py`):
 
   | Công cụ | Input | Output | Tác động ra ngoài? |
   |---|---|---|---|
-  |  |  |  |  |
+  | `search_lesson` | câu hỏi của học viên (str) | ≤4 đoạn bài `{"ma_doan", "noi_dung", "moc_thoi_gian"}` từ `data/lessons.csv`, mã dạng `DNN-VNN-NN` | Không — chỉ đọc |
 
-- **Mức tự động:** [ ] AI gợi ý, người quyết · [ ] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — lý do (sai thì ai chịu gì, sửa đắt hay rẻ):
-- **Chỗ chặn rủi ro** (rủi ro lớn nhất của lát cắt bị chặn ở đâu, bằng gì):
-- **Chỗ người duyệt** (việc AI không được tự làm):
+  Hai bước kiểm (`check_input`, `check_output` trong `codebase/guard.py`) là hàm kiểm trong luồng, không phải công cụ cho AI gọi, không tác động ra ngoài.
+
+- **Mức tự động:** [ ] AI gợi ý, người quyết · [x] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — AI tự trả lời khi có đoạn bài làm căn cứ và mã đoạn kiểm được; không có căn cứ hoặc trích sai thì chuyển sang TA. Sai thì học viên chịu: học nhầm kiến thức trước buổi học trên lớp — nhưng sửa **rẻ** vì mọi câu đều có mã đoạn + mốc video để học viên tự mở ra đối chiếu; câu không chắc đã đi về TA như luồng hiện tại.
+- **Chỗ chặn rủi ro** (rủi ro lớn nhất của lát cắt bị chặn ở đâu, bằng gì): Rủi ro lớn nhất là **trả lời sai mà nghe chắc chắn / bịa mã đoạn**. Chặn ở 3 lớp: (1) không có đoạn bài liên quan → trả câu "không có trong bài" **trước khi gọi model**; (2) SYSTEM bắt chỉ dùng căn cứ và mọi khẳng định kèm mã đoạn; (3) `check_output` loại mọi câu trả lời không có mã đoạn hoặc trích mã không có trong căn cứ → cho model sửa 1 lần, vẫn sai thì trả "không có trong bài". Prompt injection / nhờ làm hộ bài bị chặn ở bước 0, không đến model.
+- **Chỗ người duyệt** (việc AI không được tự làm): AI không giải đáp câu ngoài bài — chuyển cho **TA** trả lời như hiện nay. AI không gửi tin cho TA, không chấm bài, không sửa dữ liệu bài học; `data/lessons.csv` do người (Nga) chép và kiểm từ video thật.
 - **Nguyên tắc thiết kế** (≥3, bắt buộc G10):
 
   | Nguyên tắc | Chỗ cụ thể trên sơ đồ / trong bản chạy thử |
   |---|---|
-  | G10 — thu hẹp phạm vi khi không chắc |  |
-  |  |  |
-  |  |  |
+  | G10 — thu hẹp phạm vi khi không chắc | Nhánh "không có đoạn bài" và "trượt kiểm, hết lượt" → trả đúng câu *"Phần này không có trong bài, bạn hỏi TA nhé."*; câu quá ngắn/mơ hồ → hỏi lại bài nào, ý nào. Kiểm bằng câu thử loại `kho` và câu ngoài bài trong `eval/benchmark.csv`. |
+  | G11 — giải thích vì sao | Mọi khẳng định kèm `[DNN-VNN-NN]` + mốc video → học viên thấy câu trả lời lấy từ đâu và mở lại được. Kiểm bằng câu thử loại `thuong` (metric: có mã đoạn đúng). |
+  | G1 — làm rõ hệ thống làm được gì | SYSTEM và câu từ chối nói rõ phạm vi: chỉ trả lời nội dung bài pre-class, không làm hộ bài. Kiểm bằng câu thử loại `tu_choi`. |
+  | G2 — làm rõ làm tốt đến đâu | Không có căn cứ thì nói thẳng là không có, thay vì trả lời chung chung; trả lời ngắn (≤5 câu) chỉ trong phạm vi đoạn trích. |
 
-- Phần nào còn giả (công cụ trả dữ liệu giả, model chế độ giả…) — ghi rõ, không giả làm thật:
-
+- Phần nào còn giả (công cụ trả dữ liệu giả, model chế độ giả…) — ghi rõ, không giả làm thật *(cập nhật lúc CP2, 27/11)*:
+  - **Model:** đang ở chế độ giả (`MODEL_PROVIDER` trống) — câu trả lời được dựng từ đoạn bài đầu tiên kèm mã, nhãn `[chế độ giả]`, token = 0. Nối model thật trong `codebase/ai.py` trước CP3.
+  - **Dữ liệu bài học:** `data/lessons.csv` đang được Nga chép từ video pre-class thật (mục tiêu ≥15 đoạn ở CP2). Khi chưa có file, `agent.py` dùng **3 đoạn GIẢ mã `D00-…`** (tự viết, không phải lời bài) để luồng chạy hết; trace ghi `dự phòng: … dùng 3 đoạn GIẢ`.
+  - **Công cụ / kiểm:** `search_lesson` (tools.py) và `guard.py` đang viết; `agent.py` có bản dự phòng `search_lesson_fallback` (so từ khoá không dấu, có `@tool` nên trace đếm lần gọi) và kiểm mã đoạn đơn giản, ghi `note("dự phòng: …")` vào trace khi dùng bản này.
 ## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
 
 | Kịch bản | Lớp (1–4) | Hành vi mong muốn (nói gì, hiện gì, cho làm gì tiếp) | Câu thử |
