@@ -60,10 +60,10 @@ flowchart TD
     P -- "rỗng / quá ngắn" --> R0[/"Hỏi lại: bài nào, vướng ý nào"/]
     P -- "prompt injection" --> R1[/"Từ chối + chỉ nói về bài học"/]
     P -- "nhờ làm hộ bài" --> R2[/"Từ chối + gợi ý hỏi phần đang vướng"/]
-    P -- "hợp lệ" --> B{"Bước 2 · Câu cuối là<br/>'chưa hiểu / giải thích lại'?"}
+    P -- "hợp lệ" --> B{"Bước 2 · Câu cuối là lời báo<br/>'chưa hiểu / giải thích lại'?<br/>(câu hỏi nội dung kiểu 'tại sao model không hiểu…' → không)"}
     B -- "không" --> S1["Nhánh HỎI MỚI<br/>search_lesson(câu cuối)"]
-    B -- "có, câu nêu chủ đề" --> T["Chủ đề = phần còn lại của câu"]
-    B -- "có, không nêu chủ đề" --> H{"Có câu hỏi<br/>gần nhất để neo?"}
+    B -- "có, câu nêu chủ đề<br/>tra ra đoạn bài" --> T["Chủ đề = phần còn lại của câu"]
+    B -- "có, không nêu chủ đề<br/>(hoặc chỉ từ đệm: phần này, cái đó…)" --> H{"Có câu hỏi<br/>gần nhất để neo?"}
     H -- "có" --> T2["Chủ đề = câu hỏi gần nhất<br/>(neo, không hỏi ngược)"]
     H -- "không (đầu phiên)" --> R3[/"Hỏi lại 1 câu: khái niệm nào? (G10)"/]
     T --> S2["Nhánh GIẢI THÍCH LẠI<br/>search_lesson(chủ đề)"]
