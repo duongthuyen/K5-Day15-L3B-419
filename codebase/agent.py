@@ -99,7 +99,9 @@ _INJECTION = [
     r"(in ra|tiet lo|cho (minh|toi|em) xem|dua (ra|minh)|reveal|print|show) .{0,25}(system prompt|huong dan he thong|prompt (cua ban|he thong))",
     r"system prompt cua (ban|may|tro ly)",
     r"bo qua (moi |tat ca |cac )?(huong dan|luat|lenh)", r"quen (het )?(huong dan|luat)",
-    r"ban (bay gio )?la (mot )?(?!tro ly)", r"dong vai", r"jailbreak",
+    # chỉ bắt câu ĐÒI đổi vai ("từ giờ bạn là…", "đóng vai…"); "bạn là ai", "agent đóng vai trò gì" vẫn cho qua
+    r"(tu (gio|bay gio|nay)|bay gio) ban (se )?la ", r"ban (bay gio|tu gio) (se )?la ",
+    r"dong vai(?! tro)", r"gia lam ", r"jailbreak", r"developer mode",
     r"in ra (huong dan|prompt)", r"tiet lo (huong dan|prompt)",
 ]
 _INJECTION_RAW = [r"\bDAN\b"]   # "DAN" viết hoa (jailbreak) — không so trên _norm vì "dẫn/dán/dân" đều thành "dan"
