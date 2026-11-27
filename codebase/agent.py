@@ -255,7 +255,13 @@ def _lesson_rows() -> list:
         note("dự phòng: data/lessons.csv chưa có — dùng 3 đoạn GIẢ (mã D00-…)")
         return _FAKE_LESSONS
     with open(LESSONS_CSV, encoding="utf-8-sig", newline="") as f:
-        return list(csv.DictReader(f))
+        # Dòng khung chưa điền (thiếu mã đoạn đúng dạng hoặc thiếu nội dung) → bỏ qua, không đưa vào căn cứ.
+        rows = [r for r in csv.DictReader(f)
+                if CODE_RE.fullmatch((r.get("ma_doan") or "").strip()) and (r.get("noi_dung") or "").strip()]
+    if not rows:
+        note("dự phòng: data/lessons.csv chưa có dòng nào điền xong — dùng 3 đoạn GIẢ (mã D00-…)")
+        return _FAKE_LESSONS
+    return rows
 
 
 @tool
