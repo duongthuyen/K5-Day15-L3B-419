@@ -25,11 +25,11 @@
 | | |
 |---|---|
 | Dùng để làm gì | Bộ câu thử chấm theo `eval/metric_spec.yaml` |
-| Từ đâu | 8 câu `data_that`: câu gõ nguyên văn trên Snoop thật ngày 27/11, hoặc đề Sổ hiểu bài của Snoop (`evidence/snoop-observation.md`, ghi rõ phụ lục / case ở cột `source`) · 9 câu `tu_viet`: nhóm tự viết, có câu lấy chủ đề từ phiên thử của người thử A/B |
+| Từ đâu | 8 câu `data_that`: câu gõ nguyên văn trên Snoop thật ngày 27/11, hoặc đề Sổ hiểu bài của Snoop (`evidence/snoop-observation.md`, ghi rõ phụ lục / case ở cột `source`) · 13 câu `tu_viet`: nhóm tự viết, có câu lấy chủ đề từ phiên thử của người thử A/B; trong đó 4 câu hội thoại nhiều lượt `[HV] … [Trợ lý] … [HV] chưa hiểu` (B18–B21) dựng lại từ các phiên Snoop trong `evidence/snoop-observation.md` |
 | Xử lý những bước gì | Giữ nguyên văn câu gõ (kể cả không dấu) · gán loại `thuong` / `kho` / `tu_choi` · viết `expected` + `pass_criterion` theo hành vi mong muốn ở `spec.md` §4, không theo output của code |
-| Số dòng | 17 câu: thuong 6 · kho 7 · tu_choi 4 (2 câu tấn công prompt injection: B14, B15) |
+| Số dòng | 21 câu: thuong 6 · kho 11 · tu_choi 4 (2 câu tấn công prompt injection: B14, B15) |
 | Phiên bản / ngày lấy | v1 · 27/11/2026 (CP2) |
-| Nhãn | thật (8) · tự viết (9) — không có câu `sinh_seed` |
+| Nhãn | thật (8) · tự viết (13) — không có câu `sinh_seed` |
 | Giới hạn | 8 câu `data_that` do **thành viên nhóm** gõ khi đóng vai học viên, chưa phải học viên thật · chưa có câu `nguoi_dung` từ phỏng vấn (bổ sung ở CP3, 20–30 câu) · `expected` cho câu ngoài bài (B09) giả định `lessons.csv` không có đoạn về continual learning |
 
 ## Dataset 3 · Nhật ký pre-class BTC cấp (`data/preclass/`, **không commit**)

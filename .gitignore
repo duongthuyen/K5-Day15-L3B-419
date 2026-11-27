@@ -35,3 +35,8 @@ evidence/**/raw-*
 # Nguyên file data BTC cấp (data/preclass, data/training-ops… của repo đề): để ở đây, không commit
 data-btc
 data-btc/
+# Data BTC cấp bị commit nhầm vào data/ — chỉ giữ README mô tả, không đưa file data lên repo
+data/preclass/*
+!data/preclass/README.md
+data/training-ops/*
+!data/training-ops/README.md
