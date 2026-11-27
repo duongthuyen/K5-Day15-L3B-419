@@ -47,8 +47,8 @@ REFUSE_HOMEWORK = ("Mình không làm hộ bài tập hay bài kiểm tra đư�
                    "Bạn gửi phần bạn đang vướng trong bài học, mình chỉ lại đoạn video liên quan nhé.")
 REFUSE_INJECTION = "Mình chỉ trả lời câu hỏi về nội dung bài học pre-class thôi. " + NOT_FOUND
 ASK_AGAIN = "Bạn hỏi cụ thể hơn giúp mình nhé — bạn đang xem bài/video nào và vướng ở ý nào?"
-ASK_TOPIC = ("Mình chưa thấy bạn hỏi khái niệm nào trước đó. "
-             "Bạn gõ giúp mình tên khái niệm đang chưa hiểu (vd: few-shot, attention), mình giải thích theo cách dễ hiểu nhé.")
+ASK_TOPIC = ("Mình chưa thấy bạn hỏi khái niệm nào trước đó — bạn đang chưa hiểu khái niệm nào "
+             "(vd: few-shot, attention) để mình giải thích theo cách dễ hiểu hơn?")
 TA_HINT = "Nếu vẫn chưa rõ, bạn hỏi TA để được giảng trực tiếp nhé."
 
 MAX_STEPS = 2   # số lần gọi model tối đa cho một câu (1 lần trả lời + 1 lần sửa)
