@@ -11,10 +11,10 @@
 
 | STT | Họ và tên | Mã học viên | Vai trò | Phần việc chính |
 |---|---|---|---|---|
-| 1 | Dương Thị Huyền | 2A202604077 | Đội trưởng | Điều phối, nộp checkpoint; bản chạy thử `codebase/` (agent.py, tools.py, ai.py) |
-| 2 | Hoàng Thị Thanh Nga | 2A202604079 | Thành viên | Bằng chứng người dùng: phỏng vấn, khảo sát (`evidence/`), canvas dòng 2–4 |
-| 3 | Phạm Minh Tâm | 2A202604097 | Thành viên | Bộ câu thử + metric + data card (`eval/benchmark.csv`, `eval/metric_spec.yaml`, `data/DATA_CARD.md`) |
-| 4 | Bùi Thu Phương | 2A202604080 | Thành viên | Spec + sơ đồ kiến trúc (`spec.md` §4, §7), chi phí (`cost/`), slides |
+| 1 | Dương Thị Huyền | 2A202604077 | Đội trưởng | AI Engineer + điều phối: `codebase/` (agent, tools, ai), chạy eval/score, nộp checkpoint |
+| 2 | Hoàng Thị Thanh Nga | 2A202604079 | Thành viên | User Researcher: `evidence/`, `spec.md` §0–§3 + §9, canvas dòng 2–4, `docs/ai-usage.md` |
+| 3 | Phạm Minh Tâm | 2A202604097 | Thành viên | Data & Benchmark Owner: `data/` (bài có mã đoạn) + `DATA_CARD.md`, `eval/benchmark.csv`, `cost/` |
+| 4 | Bùi Thu Phương | 2A202604080 | Thành viên | Product & Eval Designer: `spec.md` §4–§8, `eval/metric_spec.yaml`, chấm `pass`, `slides/` |
 
 **Quy tắc điền**
 - **Lớp:** `L3A` hoặc `L3B`. **Track:** một chữ `A` (EdTech), `B` (Y tế), `C` (Du lịch), `D` (Thương mại điện tử), `E` (Tài chính) hoặc `F` (Làn khác). **Link repo:** link GitHub công khai của nhóm.

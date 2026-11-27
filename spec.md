@@ -1,35 +1,42 @@
-# AI SPEC — Tra cứu bài pre-class kèm mã đoạn · Nhóm 419 · Phòng [XXX] · Zone [X]
+# AI SPEC — Giải thích lại khi học viên "vẫn chưa hiểu" · Nhóm 419 · Phòng [XXX] · Zone [X]
 
 > Mốc nộp: §7 chốt chuẩn "đạt" tại **CP2 19:30 Thứ Sáu 27/11** · §0–§7 nộp **CP3 10:00 Thứ Bảy 28/11** · đủ §0–§10 **CP4 14:30 Thứ Bảy 28/11** · §10 changelog ghi tiếp đến **23:59 Thứ Bảy 28/11**.
 > Đầu mỗi mục ghi bước guide (`02-guide.md` trong repo đề) chỉ cách điền. Mỗi mục ngắn, có số và nguồn; chi tiết để ở file được trỏ tới. Xoá dòng hướng dẫn trong ngoặc vuông khi điền xong.
 
-Track: [x] A · [ ] B · [ ] C · [ ] D · [ ] E — bài toán: [đề gợi ý trong file track, hoặc bài toán nhóm tự mở rộng] __
+Track: [x] A · [ ] B · [ ] C · [ ] D · [ ] E — bài toán: A1 · Tutor cho LMS và trang pre-class — tối ưu một điểm trợ giảng Snoop đang làm chưa tốt
 Data BTC cấp đã dùng (nếu có — không commit nguyên file): __
 
 ## §0. Hiện tại việc này diễn ra thế nào *(guide 1.1)*
 - Luồng hiện tại của việc này, trong khoá hoặc trên app thật (3–5 bước; ảnh chụp từ tài khoản của mình, đã che thông tin):
-- Công cụ / AI đang được dùng cho việc này (nếu có) + nguồn. Không kiểm được thì ghi "chưa kiểm":
+  1. Học viên xem video bài pre-class, hỏi trợ giảng Snoop ở khung "Trao đổi" về một khái niệm (vd few-shot, attention).
+  2. Snoop trả lời đúng, gọn, kèm mốc video (vd "Phần 2 … ở 00:49").
+  3. Học viên nhắn "vẫn chưa hiểu" → Snoop hỏi ngược "chưa hiểu chỗ nào", có khi liệt kê lại mọi chủ đề đã nói trong phiên.
+  4. Học viên gõ lại tên chủ đề → Snoop giảng lại bằng đúng ví dụ / slide của bài, có khi khó hơn.
+  5. Chỉ khi học viên tự yêu cầu rất cụ thể ("ví dụ đời thường, đừng dùng câu chữ bài") Snoop mới đổi cách giảng.
+  Nguồn: 2 lượt test trên Snoop thật ngày 27/11 — `evidence/snoop-observation.md` mục 4 · ảnh chụp: __
+- Công cụ / AI đang được dùng cho việc này (nếu có) + nguồn. Không kiểm được thì ghi "chưa kiểm": trợ giảng Snoop trên preclass-online.com (chat "Trao đổi" + "Sổ hiểu bài"), đã kiểm bằng dùng thử trực tiếp 27/11. Model và prompt bên dưới: chưa kiểm.
 
 ## §1. Người dùng & bằng chứng *(guide 1.1, 1.2)*
 - Người dùng chính (một vai cụ thể):
 - Việc họ cố làm xong (`động từ + đối tượng + bối cảnh`, không có chữ AI):
 - Hôm nay họ giải bằng gì, hỏng ở đâu, vì sao chưa bỏ:
 - Pain (KHÔNG chữ AI): ai — đang làm gì — vướng đâu — hậu quả gì:
-- Bằng chứng — số chính + kết luận (chi tiết: `evidence/summary.md`): __
+- Bằng chứng — số chính + kết luận (chi tiết: `evidence/snoop-observation.md`): test trên Snoop thật — 4/4 lượt "chưa hiểu" bị hỏi ngược thay vì giảng lại; 4/4 lần giảng lại quay về ví dụ của bài (2 người thử, 2 bài, 3 chủ đề). Độ phổ biến trong học viên: __ (phỏng vấn x/n · `chat.csv` x/N — đang làm)
 
 ## §2. Impact & quyết định chọn *(guide 1.3)*
 
 | Hướng | Bao nhiêu người gặp | Bao nhiêu lần / tháng | Mỗi lần tốn gì | Impact / tháng | Làm kịp không | Chọn? |
 |---|---|---|---|---|---|---|
-|  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |
+| **1. Giải thích lại khi học viên nói "chưa hiểu"** (neo câu hỏi gần nhất, đổi cách giảng) | __ *(phỏng vấn / chat.csv)* | __ | __ phút tự tìm cách hỏi lại / bỏ hỏi | __ | Có — 1 quyết định AI, test được bằng câu thử nhiều lượt | ✅ |
+| 2. Công nhận câu đúng nhưng khác cách bài giảng nói / trả lời kiến thức đúng ngoài bài | __ | __ | Bị chấm sai, mất niềm tin | __ | Khó — cần nguồn kiến thức ngoài bài để kiểm đúng sai | ❌ |
+| 3. Chấm nhất quán giữa chat và Sổ hiểu bài | __ | __ | Không biết tin kết quả nào | __ | Khó — cần nhiều lần chạy để đo, chạm vào hệ chấm điểm | ❌ |
 
 - **Impact / tháng** của hướng chọn = __ người × __ lần × __ phút = __ — nguồn từng thừa số: __ (không có nguồn thì ghi rõ *(tự ước tính)*)
-- Hướng ĐÃ LOẠI + vì sao (giữ lại, đừng xoá):
+- Hướng ĐÃ LOẠI + vì sao (giữ lại, đừng xoá): hướng 2 và 3 có bằng chứng (`evidence/snoop-observation.md` mục 7) nhưng mỗi hướng là một quyết định AI riêng, chạm vào chấm điểm (sai thì đắt, cần người duyệt) và cần nguồn kiến thức ngoài bài — không làm trọn kịp trong ~10 giờ. Hướng 1 là chỗ cả 2 người thử cùng gặp, nhỏ, đo được.
 - Số lần / tháng của từng kiểu người dùng (dùng cho persona ở §8):
 
 ## §3. Giải pháp tương tự *(guide 2.1)*
+- **Trợ giảng Snoop (preclass-online.com)**: đáng học — câu trả lời đầu đúng, gọn, luôn kèm mốc video; đổi được ví dụ khi được yêu cầu cụ thể · đáng né — hỏi ngược "chưa hiểu chỗ nào", liệt kê cả phiên, giảng lại bằng đúng câu chữ của bài · mình khác — mặc định neo câu hỏi gần nhất và **tự** đổi cách giảng, vẫn giữ mốc video / mã đoạn để kiểm lại
 - **NotebookLM (Google)** — hỏi đáp trên tài liệu mình nạp vào: **đáng học** là câu trả lời có trích dẫn trỏ về đúng đoạn nguồn, bấm vào xem được · **đáng né** là học viên phải tự tải tài liệu lên, mà lời bài pre-class không có sẵn dạng văn bản · **mình khác**: nguồn là đoạn bài đã chép sẵn của khoá, mã đoạn kèm mốc video để tua lại; ngoài bài thì chỉ sang TA, không trả lời chung chung.
 - **Khanmigo (Khan Academy)** — trợ lý học tập trong khoá học: **đáng học** là không đưa đáp án làm hộ, kéo học viên về chỗ đang vướng · **đáng né** là hỏi gợi mở nhiều lượt, tốn thời gian của người đi làm chỉ muốn tra nhanh một ý · **mình khác**: trả lời 1 lượt, ≤5 câu, chỉ trong phạm vi đoạn trích; từ chối làm hộ ngay ở bước chặn sớm.
 - **ChatGPT / chatbot chung** (học viên đang tự dùng khi chưa hỏi TA) — **đáng học** là trả lời ngay, không phải chờ · **đáng né** là trả lời bằng kiến thức ngoài, có thể lệch với cách giảng trong bài, không chỉ ra đoạn nào trong video · **mình khác**: chỉ dùng căn cứ từ `data/lessons.csv`, mã đoạn bị kiểm bằng `check_output`, không có căn cứ thì nói thẳng *(chưa kiểm số học viên dùng ChatGPT — Phương hỏi thêm trong phỏng vấn / khảo sát)*.
@@ -118,7 +125,21 @@ flowchart TD
 - Ai có thể bị hại nếu AI sai, và nhóm chặn thế nào:
 
 ## §10. Phân công & changelog
-- Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"): Dương Thị Huyền (đội trưởng, `codebase/`) · Hoàng Thị Thanh Nga (`evidence/`) · Phạm Minh Tâm (`eval/`, `data/`) · Bùi Thu Phương (`spec.md` §4/§7, `cost/`, slides) — chi tiết `TEAMS.md`
+- Phân công có tên (theo chặng, chia cặp — guide "Cách chia việc"): mỗi người **giữ riêng một nhóm file** → làm song song, không sửa chồng file của nhau.
+
+  | Thành viên | Role | File sở hữu | CP2 (19:30 T6) | CP3 (10:00 T7) | CP4 (14:30 T7) | Cặp review chéo |
+  |---|---|---|---|---|---|---|
+  | Dương Thị Huyền (Đội trưởng) | AI Engineer + điều phối | `codebase/agent.py`, `tools.py`, `ai.py`, `eval/README.md`, `eval/report.md`, `README.md` | `python run.py` chạy hết luồng ở chế độ giả; `search_lesson` đọc `data/` (trước khi có data thì trả dữ liệu giả cố định) | Nối model thật, `eval --try` → `eval` lượt 1, `score` | Cải tiến → lượt 2, `simulate`, viết `eval/report.md`; nộp mọi checkpoint | Phương |
+  | Hoàng Thị Thanh Nga | User Researcher | `evidence/` (interviews, survey, data-mining, summary), `spec.md` §0–§3 + §9, canvas dòng 2–4, `docs/ai-usage.md` | Phỏng vấn ≥3 học viên + khảo sát nhanh → số đầu tiên + 1 trích dẫn vào canvas dòng 4; gửi Tâm ≥4 câu hỏi thật của người dùng | `spec.md` §0–§3 có số + nguồn; `evidence/summary.md` | `spec.md` §9 rủi ro & an toàn; `docs/ai-usage.md`; số impact cho Phương làm slides | Tâm |
+  | Phạm Minh Tâm | Data & Benchmark Owner | `data/` (bài pre-class đã đánh mã đoạn), `data/DATA_CARD.md`, `eval/benchmark.csv`, `cost/personas.yaml`, `cost/cost-estimate.md` | Trong 30 phút đầu commit 5 đoạn mẫu đúng format; đủ data + `DATA_CARD.md`; `benchmark.csv` ≥10 câu (≥5 `kho`, ≥2 `tu_choi` gồm 2 câu tấn công, ≥1/3 từ người dùng thật do Nga gửi) | Mở rộng benchmark 20–30 câu; `cost/personas.yaml` | `simulate` cùng Huyền; `cost/cost-estimate.md` | Nga |
+  | Bùi Thu Phương | Product & Eval Designer | `spec.md` §4–§8, `eval/metric_spec.yaml`, `slides/`, cột `pass`/`ghi_chu` khi chấm | Sơ đồ §4 (Input → AI Core → Chặn rủi ro → Output) + bảng công cụ; `metric_spec.yaml` ≥3 metric; **chốt chuẩn "đạt" §7 trước 19:30** | §5 ≥6 kịch bản + 2 tấn công, §6; chấm cột `pass` lượt 1 theo metric | §8 chi phí (số từ Tâm); `slides/outline.md` | Huyền |
+
+  **3 hợp đồng chung — chốt trong 15 phút đầu, sau đó không ai phải chờ ai:**
+  1. *Format data* (Tâm giữ): mỗi đoạn có `ma_doan` dạng `L01-P03` (bài 01, đoạn 03), `bai`, `noi_dung`. Huyền, Phương, Tâm đều viết theo format này kể cả trước khi data xong.
+  2. *Công cụ* (Huyền giữ): `search_lesson(query) -> [{ma_doan, noi_dung}]`; không tìm thấy → danh sách rỗng.
+  3. *Output* (Phương giữ): câu trả lời luôn kèm `[mã đoạn]`; không có căn cứ → câu cố định "Tài liệu không có nội dung này — hãy hỏi giảng viên"; thiếu thông tin → hỏi lại 1 câu. Metric và `expected` trong benchmark chấm theo đúng format này.
+
+  Quy tắc: `git pull` trước khi sửa, chỉ sửa file mình sở hữu (cần sửa file người khác thì nhắn chủ file); `run.py check` sạch trước mỗi lần push. Mỗi người review chéo phần của cặp mình trước mỗi checkpoint.
 - Dùng AI vào việc gì (2–3 dòng; chi tiết `docs/ai-usage.md`):
 - Nhật ký thay đổi — **mọi thay đổi sau CP2 19:30 Thứ Sáu 27/11 phải có dòng ở đây**:
 
