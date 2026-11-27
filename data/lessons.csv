@@ -1,16 +1,18 @@
-ma_doan,video,moc_thoi_gian,noi_dung
-D__-V__-__,[cần chép] few-shot là gì — đưa vài cặp ví dụ input→output vào prompt (B01 B18 B19 B20),,
-D__-V__-__,[cần chép] few-shot khác fine-tune — không huấn luyện lại / không đổi trọng số (B01 B18 B20),,
-D__-V__-__,[cần chép] system prompt là gì — đặt vai trò và luật cho model (snoop-observation A.2),,
-D__-V__-__,[cần chép] chain-of-thought — khi nào giúp / khi nào không (B05),,
-D__-V__-__,[cần chép] ReAct — agent vừa suy nghĩ vừa hành động (B06),,
-D__-V__-__,[cần chép] function calling — model gọi công cụ theo cấu trúc (B06),,
-D__-V__-__,[cần chép] token là gì (B11 — chỉ chép phần bài nói; KHÔNG thêm BPE/subword nếu bài không có),,
-D__-V__-__,[cần chép] LLM đoán token tiếp theo theo vòng lặp (snoop-observation case 10),,
-D__-V__-__,[cần chép] xác suất của token tiếp theo — ví dụ trong slide (snoop-observation case 2),,
-D__-V__-__,[cần chép] sampling — rút token theo xác suất nên hỏi lại có thể ra khác (B02 B08 B10),,
-D__-V__-__,[cần chép] greedy — luôn chọn token xác suất cao nhất (B08 — KHÔNG chép beam search nếu bài không có),,
-D__-V__-__,[cần chép] temperature thấp / cao làm gì (B04),,
-D__-V__-__,[cần chép] temperature thấp chỉ làm ổn định — không làm đúng hơn (B12),,
-D__-V__-__,[cần chép] attention là gì — trộn có trọng số giữa các token (B03 B21),,
-D__-V__-__,[cần chép] attention — ví dụ / hình minh hoạ trong bài (B21),,
+﻿ma_doan,video,moc_thoi_gian,noi_dung
+D01-V02-01,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:00:34,"Phần văn bản đã có gọi là ngữ cảnh. Mỗi mảnh chữ model xử lý gọi là một token. Câu trả lời không có sẵn mà được mở rộng từng bước, mỗi bước thêm một token."
+D01-V02-02,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:00:41,"Từ ngữ cảnh, model tính ra một bảng khả năng (xác suất) cho token kế tiếp, ví dụ sau 'Hôm nay trời': nắng 50%, mưa 30%, đẹp 10%. Đây là bảng khả năng, chưa phải câu trả lời."
+D01-V02-03,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:00:57,"Greedy: luôn chọn token có khả năng (xác suất) cao nhất trong bảng, ví dụ luôn chọn 'nắng'."
+D01-V02-04,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:01:03,"Sampling (lấy mẫu): model rút thăm token theo tỉ lệ xác suất trong bảng, nên token xác suất thấp như 'mưa' vẫn có thể được chọn. Vì vậy hỏi lại đúng câu cũ có thể nhận câu trả lời khác, và đó không phải là lỗi."
+D01-V02-05,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:01:28,"Vòng lặp đoán token: ngữ cảnh vào model, model ra bảng khả năng, chọn một token, nối token vào cuối ngữ cảnh rồi tính lại. Mỗi token vừa là một phần câu trả lời vừa là đầu vào cho lần dự đoán sau; câu trả lời dài chỉ là vòng lặp này chạy nhiều lần."
+D01-V02-06,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:02:03,"Temperature không thêm token mới vào bảng, chỉ làm bảng dồn lại hoặc giãn ra trước khi rút thăm. Mức 1 giữ nguyên bảng; temperature thấp (0,2) dồn về token cao nhất, gần như lần nào cũng chọn nó; temperature cao (2) giãn bảng nên kết quả đa dạng hơn."
+D01-V02-07,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:02:23,"Giảm temperature làm kết quả ổn định hơn chứ không biến câu trả lời thành đúng hơn. Nếu bảng đang nghiêng về đáp án sai, temperature thấp chỉ làm model sai đều hơn. Temperature đổi độ ổn định, không đổi độ đúng."
+D01-V02-08,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:02:57,"Token là mảnh chữ: có thể là một từ, một phần của từ, hoặc một dấu câu. Mỗi model chia khác nhau, nên đừng lấy số từ nhân một tỉ lệ cố định; cần con số thật thì dùng công cụ đếm của đúng model đó. Sức chứa và chi phí của model đều tính bằng token."
+D01-V02-09,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:03:35,"Ví dụ attention: 'Ở sân bóng, Nam đang đá' và 'Nam nhặt một hòn đá' — chữ 'đá' giống nhau nhưng nghĩa khác (hành động / vật) nhờ các chữ xung quanh. Cụm 'sân bóng', 'đang' có trọng số lớn ở câu đầu; cụm 'một hòn' nổi lên ở câu sau."
+D01-V02-10,"Day01 d01-r1-v02 — LLM tạo câu trả lời thế nào (token, sampling, temperature, attention)",00:03:55,"Attention là cơ chế kết hợp thông tin giữa các vị trí trong câu. Mỗi token biểu diễn bằng một vector; một bước attention chấm mức liên quan giữa vị trí đang xét với từng vị trí khác, đổi thành trọng số, rồi trộn thông tin theo các trọng số đó. Bảng attention không phải xác suất token sẽ được sinh ra."
+D01-V03-01,Day01 d01-r1-v03 — huấn luyện và giới hạn của model,00:00:11,"Model trải qua ba chặng huấn luyện: pre-training (đọc cả thư viện để có năng lực nền), SFT (được chỉ cách trả lời qua ví dụ mẫu), RLHF (được uốn nắn nhờ điểm đánh giá của con người). Bên trong vẫn là vòng lặp đoán token."
+D04-V02-01,"Day04 d04-r3-v02 — kỹ thuật prompt nâng cao (zero-shot, few-shot, chain-of-thought)",00:00:19,"Thang thử dần khi viết prompt: zero-shot (không đưa ví dụ, chỉ nói việc cần làm, thử trước tiên), rồi đưa ví dụ mẫu (few-shot), rồi chain-of-thought. Một hai ví dụ chọn kỹ thường tốt hơn năm ví dụ chọn bừa."
+D04-V02-02,"Day04 d04-r3-v02 — kỹ thuật prompt nâng cao (zero-shot, few-shot, chain-of-thought)",00:00:49,"Few-shot là đưa vài cặp đầu vào và đầu ra mẫu vào prompt để model học theo khuôn, ví dụ tách câu 'tìm balo dưới 500 nghìn' thành loại hàng, ngân sách, số lượng. Ví dụ phải cùng loại tình huống với đầu vào thật, nếu không model học sai khuôn."
+D04-V02-03,"Day04 d04-r3-v02 — kỹ thuật prompt nâng cao (zero-shot, few-shot, chain-of-thought)",00:01:47,"Chain-of-thought (suy luận từng bước) không phải lúc nào cũng tốt hơn: giúp với toán, logic, lập kế hoạch nhiều bước; nhưng với việc theo trực giác như phân loại cảm xúc, ép giải thích từng bước có khi làm model nghĩ quá và sai nhiều hơn."
+D04-V03-01,Day04 d04-r3-v03 — system prompt,00:00:20,"System prompt là bộ luật chạy suốt cả phiên của agent, viết như một hợp đồng năm phần: persona (vai trò), rules (luôn làm / không làm), capabilities (công cụ, dữ liệu được dùng), constraints (giới hạn không được vượt), output contract (định dạng đầu ra)."
+D04-V06-01,Day04 d04-r3-v06 — tool calling / function calling,00:00:18,"Trong tool calling (function calling), model không tự chạy công cụ: nó quyết định có cần công cụ không rồi trả về một yêu cầu có cấu trúc gồm tên công cụ và tham số. Ứng dụng mới là nơi chạy công cụ và gửi kết quả lại cho model."
+D03-V04-01,Day03 d03-r2-v04 — vòng lặp ReAct,00:00:20,"ReAct ghép suy luận và hành động: agent đi qua ba bước nghĩ (còn thiếu gì, làm gì tiếp), hành động (gọi một công cụ với tham số cụ thể), quan sát (đọc kết quả công cụ), rồi lặp lại cho tới khi đủ thông tin hoặc gặp điều kiện dừng."

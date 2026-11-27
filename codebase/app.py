@@ -83,4 +83,12 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    # Mặc định mở giao diện web localhost (codebase/web.py); thêm --cli để dùng bản dòng lệnh.
+    if "--cli" in sys.argv[1:]:
+        sys.exit(main())
+    try:
+        import web
+    except Exception as e:
+        print("Không nạp được codebase/ — lỗi ở %s: %s: %s" % (_where(e), type(e).__name__, e))
+        sys.exit(1)
+    sys.exit(web.serve())
