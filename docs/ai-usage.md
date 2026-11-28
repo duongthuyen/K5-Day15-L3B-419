@@ -14,6 +14,6 @@ README của nhóm có mục "Dùng AI vào việc gì" (2–3 dòng, bắt bu�
 | Viết câu thử (benchmark) | | | Mỗi câu thử có `source`; câu thử AI viết được ghi rõ | |
 | Sinh data `synthetic` (nếu có) | | | Seed __ · kiểm tay __ dòng | |
 | Chấm cột `pass` bằng LLM (nếu có) | Claude Code | Chấm nháp `run-9`, `run-10` (ghi `[AI nháp]` + lý do từng câu, chấm chặt câu lệch ý; chỉ sửa cột `pass`, `ghi_chu`, đã kiểm không đổi cột khác) | `run-10` chờ người thứ hai duyệt (Nga chấm nháp `run-2` … `run-8`) · kiểm tra thủ công __ câu thử, khớp __/__ | Nga |
-| Slide, văn bản | Claude Code | Điền số vào `eval/report.md`, `eval/README.md`, `cost/cost-estimate.md`, `spec.md` §4 §7 §8 §10, README; làm bản slide dự phòng `slides/demo-slides.html` → `demo-slides.pdf` (mọi số trỏ về file nguồn) | Slide chính: Huyền làm · __ | Huyền · __ |
+| Slide, văn bản | Claude Code | Điền số vào `eval/report.md`, `eval/README.md`, `cost/cost-estimate.md`, `spec.md` §4 §7 §8 §10, README; làm một bản slide nháp (đã thay bằng slide của Huyền, file nháp đã xoá) | `demo-slides.pdf` hiện tại: Huyền làm · __ | Huyền · __ |
 
 **Không dùng AI để:** tạo người được phỏng vấn, trích dẫn, câu trả lời khảo sát; sửa kết quả các lượt đã chạy (`eval/run-*.csv`, `cost/simulate-*.csv`, `traces/`).

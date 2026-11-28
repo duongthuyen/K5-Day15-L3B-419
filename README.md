@@ -120,7 +120,7 @@ Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` t
 
 2–3 dòng (bắt buộc): nhóm dùng công cụ AI nào để làm gì, người kiểm lại phần nào. Chi tiết: [docs/ai-usage.md](docs/ai-usage.md). Coding agent đọc [AGENTS.md](AGENTS.md).
 
-- **Claude Code (coding agent)**, phiên 28/11 trưa: sửa prompt + bộ kiểm nhánh giải thích lại trong `codebase/agent.py`, viết `codebase/guard.py`, chạy `run-9` / `run-10` / `simulate-1` / `simulate-2`, **chấm nháp** cột `pass` của `run-9`, `run-10` (ghi `[AI nháp]`), điền số vào `eval/report.md`, `cost/cost-estimate.md`, `spec.md` §7–§8, làm bản slide dự phòng `slides/demo-slides.html`. Người kiểm: cột `pass` run-10 chờ người thứ hai duyệt (Nga chấm nháp các run khác); code và số liệu nhóm đọc lại trước khi merge (PR #1).
+- **Claude Code (coding agent)**, phiên 28/11 trưa: sửa prompt + bộ kiểm nhánh giải thích lại trong `codebase/agent.py`, viết `codebase/guard.py`, chạy `run-9` / `run-10` / `simulate-1` / `simulate-2`, **chấm nháp** cột `pass` của `run-9`, `run-10` (ghi `[AI nháp]`), điền số vào `eval/report.md`, `cost/cost-estimate.md`, `spec.md` §7–§8, làm một bản slide nháp (đã thay bằng slide của Huyền, file nháp đã xoá). Người kiểm: cột `pass` run-10 chờ người thứ hai duyệt (Nga chấm nháp các run khác); code và số liệu nhóm đọc lại trước khi merge (PR #1).
 - Phần còn lại (code `agent.py` ban đầu, đào data, câu thử, slide chính của Huyền): ____ *(nhóm tự khai công cụ AI đã dùng, nếu có)*
 
 ## File mẫu — điền ở bước nào
