@@ -108,14 +108,20 @@ Nhóm dùng stack khác (Node, Streamlit, notebook…): sửa hàm `run_app()` t
 
 | Thành phần | Thật / Giả | Ghi chú |
 |---|---|---|
-| Lời gọi AI ở quyết định trung tâm | **Thật** (bắt buộc từ CP3) | Model: ____ |
-|  |  |  |
+| Lời gọi AI ở quyết định trung tâm | **Thật** (bắt buộc từ CP3) | Model: `gpt-5.4-nano` qua OpenAI API (`codebase/ai.py`, gọi bằng `urllib`; token lấy từ `usage` của API). Key ở `.env`, không commit |
+| Căn cứ trả lời (`data/lessons.csv`) | **Thật** | 101 đoạn bài pre-class Ngày 1–4, **tóm tắt lại bằng lời của nhóm** từ transcript video (không chép nguyên văn) — `data/DATA_CARD.md` |
+| Tra đoạn bài (`search_lesson`) | **Thật**, chạy bản dự phòng | `tools.search_lesson` chưa viết; `agent.py` dùng `search_lesson_fallback` (BM25 trên `lessons.csv`, có `@tool`, trace ghi "dự phòng") |
+| Chặn rủi ro (`codebase/guard.py`) | **Thật** | `check_input` chặn prompt injection / nhờ làm hộ bài bằng so khớp mẫu chữ; `check_output` kiểm mã đoạn có thật. Diễn đạt lạ có thể lọt bước chặn đầu |
+| Trình phát video trên web (`codebase/web.py`) | **Giả** | Không có video thật: timeline mô phỏng theo mốc từng đoạn, "phụ đề" là nội dung tóm tắt trong `lessons.csv`. Bấm chip ▶ trong câu trả lời thì nhảy tới đúng đoạn |
+| Chi phí khi dùng thật (`cost/`) | **Mô phỏng** | 50 phiên theo 3 persona đếm từ `chat.csv` của BTC; token đo trên `gpt-5.4-nano`, tính theo giá `gpt-5-nano` / `gpt-6.1-terra` |
+| Hồ sơ học viên, gửi tin cho TA, chấm bài | **Không làm** | Ngoài lát cắt (`spec.md` §4 "Không làm") — chỉ đọc |
 
 ## Dùng AI vào việc gì
 
 2–3 dòng (bắt buộc): nhóm dùng công cụ AI nào để làm gì, người kiểm lại phần nào. Chi tiết: [docs/ai-usage.md](docs/ai-usage.md). Coding agent đọc [AGENTS.md](AGENTS.md).
 
-____
+- **Claude Code (coding agent)**, phiên 28/11 trưa: sửa prompt + bộ kiểm nhánh giải thích lại trong `codebase/agent.py`, viết `codebase/guard.py`, chạy `run-9` / `run-10` / `simulate-1` / `simulate-2`, **chấm nháp** cột `pass` của `run-9`, `run-10` (ghi `[AI nháp]`), điền số vào `eval/report.md`, `cost/cost-estimate.md`, `spec.md` §7–§8, làm bản slide dự phòng `slides/demo-slides.html`. Người kiểm: cột `pass` run-10 chờ người thứ hai duyệt (Nga chấm nháp các run khác); code và số liệu nhóm đọc lại trước khi merge (PR #1).
+- Phần còn lại (code `agent.py` ban đầu, đào data, câu thử, slide chính của Huyền): ____ *(nhóm tự khai công cụ AI đã dùng, nếu có)*
 
 ## File mẫu — điền ở bước nào
 

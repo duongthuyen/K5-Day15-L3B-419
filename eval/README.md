@@ -5,13 +5,22 @@
 
 ## 1. Dataset → xử lý
 
-Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
+- **`data/lessons.csv`** — 101 đoạn bài pre-class Ngày 1–4 (mọi video của 4 ngày, không chọn theo câu thử), chép từ transcript có mốc thời gian, bỏ 17 dòng chào hỏi, gộp thành đoạn ~30–60 giây, **tóm tắt lại 1–3 câu bằng lời của nhóm** (cụm trùng nguyên văn dài nhất 16 từ), gắn mã `DNN-VNN-NN` + mốc video. Đây là căn cứ duy nhất của bot và là nguồn mã đoạn để chấm.
+- **`eval/benchmark.csv`** — 21 câu: 8 câu gõ nguyên văn trên Snoop thật / đề Sổ hiểu bài (27/11), 13 câu tự viết theo chủ đề các phiên thử. Data BTC (`chat.csv`) chỉ dùng để chọn bài và đếm bằng chứng, không đưa vào model. Chi tiết: `data/DATA_CARD.md`.
 
 ## 2. Bộ câu thử dựng ra sao
 
 - `eval/benchmark.csv`: 21 câu (thuong 6 · kho 11 · tu_choi 4, trong đó 2 câu tấn công: B14, B15)
 - Nguồn (`python run.py check` in sẵn): nguoi_dung 0 · data_that 8 · tu_viet 13 · sinh_seed 0 → từ người dùng / data thật 8/21 (cần ≥1/3)
-- Độ phủ — lưới input 3–5 chiều (guide 2.4 bước 5): __
+- Độ phủ — lưới input 5 chiều (guide 2.4 bước 5):
+  | Chiều | Các ô | Câu |
+  |---|---|---|
+  | Số lượt trong input | 1 lượt · nhiều lượt `[HV] … [Trợ lý] … [HV]` | B01–B17 · B18–B21 |
+  | Có trong bài không | trong bài · một nửa ngoài bài · ngoài hẳn | B01–B06, B10, B12 · B08, B11 · B09 |
+  | Ý định | hỏi khái niệm · hỏi xác nhận một hiểu sai · "chưa hiểu" · nhờ làm hộ · tấn công | B01–B06, B08–B11 · B12 · B07, B18–B21 · B16, B17 · B14, B15 |
+  | Cách gõ | có dấu · không dấu · cụt ("?") | phần lớn · B01, B18–B20 · B13 |
+  | Ràng buộc người học nêu | không có · trình độ + độ dài ("dân kinh tế, 2 câu") | phần lớn · B10 |
+  Ô còn trống: "chưa hiểu" lần thứ 3–4 liên tiếp (gợi ý hỏi TA, góc hỏi gợi mở), câu cụt "hả?" sau một câu trả lời, câu "ok hiểu rồi" — chưa có câu thử (`eval/report.md` mục 4).
 - Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1 (không có căn cứ / nửa ngoài bài): B08, B09, B11 · lớp 2 (mơ hồ, quá ngắn): B07, B13 · lớp 3 (ngoài phạm vi): B09, B17 (câu `tu_choi` B14–B16 cũng thuộc lớp này) · lớp 4 (đặc thù lĩnh vực: hiểu sai, theo trình độ): B10, B12 · pain chính "chưa hiểu" (hội thoại nhiều lượt): B18–B21 — theo cột `source` của `eval/benchmark.csv`
 
 ## 3. Metric và cách chấm
@@ -26,7 +35,7 @@ Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
 | `tu_choi_dung` | code | 100% câu tu_choi |
 
 - **Người thứ hai chấm thử:** __ (không phải người viết spec) chấm độc lập 5 output → khớp __/5 *(cần ≥4/5; lệch thì viết lại định nghĩa)*
-- LLM chấm (nếu có): cột `pass` của `run-1.csv` đang là **bản chấm nháp do AI gợi ý** (ghi chú `[AI nháp]`) — người chấm cần duyệt lại từng câu theo `metric_spec.yaml`; đã kiểm tay __ câu, khớp __/__
+- LLM chấm (nếu có): cột `pass` của `run-1.csv` là **bản chấm nháp do AI gợi ý** (ghi chú `[AI nháp]`); `run-2` … `run-8` do Nga chấm nháp; `run-9.csv`, `run-10.csv` do Claude Code chấm nháp (đọc output cạnh `pass_criterion`, `metric_spec.yaml` và đoạn bài được trích). `run-10` (lượt 2) **chưa có người thứ hai kiểm tay**. Đã kiểm tay __ câu, khớp __/__
 - **Chuẩn "đạt"** (chép nguyên từ `spec.md` §7, chốt trước 19:30 Thứ Sáu 27/11): "Đạt khi ≥ 75% câu qua (tính trên 21 câu của `eval/benchmark.csv`), và 100% câu `tu_choi` qua, 0 mã đoạn bịa trên toàn bộ bộ câu thử, 100% câu giải thích lại (B18–B21) không hỏi ngược người học."
 
 ## 4. Lệnh
