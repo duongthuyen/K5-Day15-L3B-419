@@ -12,7 +12,7 @@ Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
 - `eval/benchmark.csv`: 21 câu (thuong 6 · kho 11 · tu_choi 4, trong đó 2 câu tấn công: B14, B15)
 - Nguồn (`python run.py check` in sẵn): nguoi_dung 0 · data_that 8 · tu_viet 13 · sinh_seed 0 → từ người dùng / data thật 8/21 (cần ≥1/3)
 - Độ phủ — lưới input 3–5 chiều (guide 2.4 bước 5): __
-- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1: __ · lớp 2: __ · lớp 3: __ · lớp 4: __
+- Câu `kho` trỏ về 4 lớp chỗ khó (`spec.md` §5): lớp 1 (không có căn cứ / nửa ngoài bài): B08, B09, B11 · lớp 2 (mơ hồ, quá ngắn): B07, B13 · lớp 3 (ngoài phạm vi): B09, B17 (câu `tu_choi` B14–B16 cũng thuộc lớp này) · lớp 4 (đặc thù lĩnh vực: hiểu sai, theo trình độ): B10, B12 · pain chính "chưa hiểu" (hội thoại nhiều lượt): B18–B21 — theo cột `source` của `eval/benchmark.csv`
 
 ## 3. Metric và cách chấm
 
