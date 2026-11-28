@@ -189,6 +189,15 @@ _NOT_LEARNER = set("model llm ai may no agent chatbot he thong tro ly gpt mo hin
 _QUESTION_START = re.compile(r"^(tai sao|vi sao|lam sao|lam the nao|the nao|khi nao|co phai|why|how|what)\b")
 
 
+# Câu cụt chỉ có dấu hỏi / từ cảm thán (so trên _norm): "?", "??", "hả?", "là sao", "sao cơ", "hmm?", "ủa".
+_PUZZLED_RE = re.compile(r"[?!.…\s]*(?:(?:ha|hu|hmm*|hm|ua|uh|sao|sao co|la sao|the nao|gi|gi vay|gi co|nghia la sao)[?!.…\s]*)?")
+
+
+def _is_puzzled(msg: str) -> bool:
+    t = _norm(msg).strip()
+    return bool(t) and bool(_PUZZLED_RE.fullmatch(t))
+
+
 def _is_confused(msg: str) -> bool:
     """Câu là lời học viên báo chưa hiểu / xin giải thích lại.
     Không tính: câu hỏi nội dung bắt đầu bằng từ hỏi ("Tại sao model không hiểu…?"),
@@ -224,7 +233,7 @@ def _read_dialog(text: str) -> dict:
     prev_question, streak = "", 1
     for i in reversed(hv_idx[:-1]):
         msg = turns[i][1]
-        if _is_confused(msg) and not _topic_words(msg):
+        if _is_puzzled(msg) or (_is_confused(msg) and not _topic_words(msg)):
             streak += 1
             continue
         prev_question = msg
@@ -541,14 +550,20 @@ def _answer_reexplain(d: dict, topic: str) -> str:
 def answer(text: str) -> dict:
     d = _read_dialog(text)
 
+    # Câu cụt kiểu "?", "hả", "là sao" NGAY SAU một câu trả lời = học viên chưa hiểu → giải thích lại.
+    # Không có câu hỏi trước để neo (vd "?" đầu phiên) thì vẫn để chặn sớm hỏi lại như cũ.
+    puzzled = bool(d["prev_question"]) and _is_puzzled(d["last"])
+    if puzzled:
+        note("câu cụt '%s' sau câu trả lời → coi như chưa hiểu" % d["last"].strip()[:20])
+
     # Bước 0: chặn sớm (chỉ xét câu cuối của học viên — lịch sử là dữ liệu, không phải lệnh)
-    blocked, why = _precheck(d["last"])
+    blocked, why = (None, None) if puzzled else _precheck(d["last"])
     if blocked:
         note("dừng: chặn sớm — %s" % why)
         return {"output": blocked}
 
     # Bước 1–2: phân nhánh
-    if not _is_confused(d["last"]):
+    if not puzzled and not _is_confused(d["last"]):
         note("nhánh: hỏi mới")
         return {"output": _answer_new(d["last"])}
 
