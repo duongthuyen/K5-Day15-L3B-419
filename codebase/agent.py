@@ -52,6 +52,7 @@ ASK_AGAIN = "Bạn hỏi cụ thể hơn giúp mình nhé — bạn đang xem b�
 ASK_TOPIC = ("Mình chưa thấy bạn hỏi khái niệm nào trước đó — bạn đang chưa hiểu khái niệm nào "
              "(vd: few-shot, attention) để mình giải thích theo cách dễ hiểu hơn?")
 TA_HINT = "Nếu vẫn chưa rõ, bạn hỏi TA để được giảng trực tiếp nhé."
+ACK_REPLY = "Tuyệt! Bạn cứ học tiếp, có khái niệm nào khác trong bài chưa rõ thì hỏi mình nhé."
 CLOSING = "Phần này đã rõ hơn chưa?"   # câu kết cố định của nhánh giải thích lại (spec §8)
 
 MAX_STEPS = 2   # số lần gọi model tối đa cho một câu (1 lần trả lời + 1 lần sửa)
@@ -189,6 +190,28 @@ _NOT_LEARNER = set("model llm ai may no agent chatbot he thong tro ly gpt mo hin
 _QUESTION_START = re.compile(r"^(tai sao|vi sao|lam sao|lam the nao|the nao|khi nao|co phai|why|how|what)\b")
 
 
+# Câu cụt chỉ có dấu hỏi / từ cảm thán (so trên _norm): "?", "??", "hả?", "là sao", "sao cơ", "hmm?", "ủa".
+_PUZZLED_RE = re.compile(r"[?!.…\s]*(?:(?:ha|hu|hmm*|hm|ua|uh|sao|sao co|la sao|the nao|gi|gi vay|gi co|nghia la sao)[?!.…\s]*)?")
+
+
+# Lời xác nhận đã hiểu / cảm ơn (so trên _norm, cả câu): "ok", "oke nha", "hiểu rồi ạ", "rõ rồi", "cảm ơn bạn nhé"…
+_ACK_RE = re.compile(
+    r"(?:(?:a|a ha|aha|vang|da|u|uh|um|ok+|oke+|okay|okie|okela|duoc|duoc roi|on roi|on|tot|tuyet|hay qua|hay|"
+    r"(?:minh |em |toi |to )?(?:hieu|ro|nam duoc|thong)(?: roi| duoc roi)?(?: ha| a)?|da hieu|hieu ro roi|"
+    r"cam on|cam on ban|cam on nhieu|thanks?|thank you|tks|ty)"
+    r"(?:[\s,.!~]+(?:a|nha|nhe|nhen|ban|nhieu|lam|roi|ha|nhe ban|nha ban))*[\s,.!~:)]*)+")
+
+
+def _is_ack(msg: str) -> bool:
+    t = _norm(msg).strip()
+    return bool(t) and "?" not in t and bool(_ACK_RE.fullmatch(t))
+
+
+def _is_puzzled(msg: str) -> bool:
+    t = _norm(msg).strip()
+    return bool(t) and bool(_PUZZLED_RE.fullmatch(t))
+
+
 def _is_confused(msg: str) -> bool:
     """Câu là lời học viên báo chưa hiểu / xin giải thích lại.
     Không tính: câu hỏi nội dung bắt đầu bằng từ hỏi ("Tại sao model không hiểu…?"),
@@ -224,7 +247,7 @@ def _read_dialog(text: str) -> dict:
     prev_question, streak = "", 1
     for i in reversed(hv_idx[:-1]):
         msg = turns[i][1]
-        if _is_confused(msg) and not _topic_words(msg):
+        if _is_puzzled(msg) or (_is_confused(msg) and not _topic_words(msg)):
             streak += 1
             continue
         prev_question = msg
@@ -247,7 +270,9 @@ def _search(text: str) -> list:
 _STOP = set("la gi cua va cho the nao lam sao khi nao o dau co khong duoc mot cac nhung nay do thi ma de voi "
             "trong bai minh em toi ban hoi nhe a oi vay sao "
             "phai dung thay doc thuong kieu nhu nen se da dang rat hon cung chi neu vi tai biet hay hoac vao ra "
-            "len lai roi luon tung moi nhieu it day kia ai sau truoc giua tren duoi bang theo ve".split())
+            "len lai roi luon tung moi nhieu it day kia ai sau truoc giua tren duoi bang theo ve "
+            # từ đệm hội thoại ("ok vậy sampling là gì"): không có trong bài nên bị chấm như từ khoá hiếm
+            "ok oke okay okie thanks thank tks hmm uh um ha nha nhe nhen hieu".split())
 
 
 def _words(s: str) -> list:
@@ -541,14 +566,26 @@ def _answer_reexplain(d: dict, topic: str) -> str:
 def answer(text: str) -> dict:
     d = _read_dialog(text)
 
+    # Câu cụt kiểu "?", "hả", "là sao" NGAY SAU một câu trả lời = học viên chưa hiểu → giải thích lại.
+    # Không có câu hỏi trước để neo (vd "?" đầu phiên) thì vẫn để chặn sớm hỏi lại như cũ.
+    # Học viên báo đã hiểu / cảm ơn ("ok", "hiểu rồi", "cảm ơn nhé") — không phải câu hỏi: đáp ngắn, không tra bài,
+    # không gọi model. Chỉ khi CẢ câu là lời xác nhận; "ok vậy temperature là gì" vẫn đi luồng thường.
+    if _is_ack(d["last"]):
+        note("dừng: học viên xác nhận đã hiểu / cảm ơn — đáp ngắn, không gọi model")
+        return {"output": ACK_REPLY}
+
+    puzzled = bool(d["prev_question"]) and _is_puzzled(d["last"])
+    if puzzled:
+        note("câu cụt '%s' sau câu trả lời → coi như chưa hiểu" % d["last"].strip()[:20])
+
     # Bước 0: chặn sớm (chỉ xét câu cuối của học viên — lịch sử là dữ liệu, không phải lệnh)
-    blocked, why = _precheck(d["last"])
+    blocked, why = (None, None) if puzzled else _precheck(d["last"])
     if blocked:
         note("dừng: chặn sớm — %s" % why)
         return {"output": blocked}
 
     # Bước 1–2: phân nhánh
-    if not _is_confused(d["last"]):
+    if not puzzled and not _is_confused(d["last"]):
         note("nhánh: hỏi mới")
         return {"output": _answer_new(d["last"])}
 
