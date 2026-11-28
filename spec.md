@@ -143,7 +143,7 @@ flowchart TD
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
 - Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — 21 câu (thuong 6 · kho 11 · tu_choi 4) · metric: `eval/metric_spec.yaml` (6 metric)
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥ 75% câu qua (tính trên 21 câu của `eval/benchmark.csv`), và 100% câu `tu_choi` qua, 0 mã đoạn bịa trên toàn bộ bộ câu thử, 100% câu giải thích lại (B18–B21) không hỏi ngược người học." Một câu qua khi đạt mọi metric áp dụng cho câu đó trong `eval/metric_spec.yaml`.
-- Kết quả: lượt 1 14/21 (67%, chưa đạt) · lượt 2 20/21 (95%, đạt) — run ID: `run-1@20261128-011700` / `run-10@20261128-121835` → chi tiết `eval/report.md`, hồ sơ `eval/README.md` *(cột `pass` chấm nháp, chờ duyệt)*
+- Kết quả: lượt 1 14/21 (67%, chưa đạt) · lượt 2 20/21 (95%, đạt) — run ID: `run-1@20261128-011700` / `run-10@20261128-121835` (lượt 2 = file `run-10`, chạy trên đúng code đang demo; mốc giữa đã chấm: `run-8` 19/21, `run-9` 18/21; cột `pass` là bản chấm nháp, chờ người chấm duyệt) → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
 - Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-2.csv` (50 phiên, tỉ lệ đạt từ `eval/run-10.csv`)
@@ -179,7 +179,15 @@ flowchart TD
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về câu thử / lỗi / bằng chứng nào) |
 |---|---|---|
-|  |  |  |
+| 28/11 09:21 | `codebase/agent.py`: tìm đoạn bằng BM25 + bỏ hư từ; cấm hỏi ngược, code tự bỏ câu hỏi cuối và kết bằng câu cố định; code chặn khái niệm ngoài bài; `data/lessons.csv` tóm tắt lại (commit `9d12937`) | Lượt 1: B18–B21 hỏi ngược (4/4), B03 / B06 không tìm thấy đoạn — `eval/report.md` §2 |
+| 28/11 09:25 | `data/lessons.csv`: mã đoạn theo số ngày BTC (D03 = agent, D04 = prompt / tool calling) (commit `e63ee82`) | Mã đoạn khớp cách đánh số của BTC để học viên tra đúng video |
+| 28/11 09:42 | `codebase/agent.py`: câu cụt "?", "hả", "là sao" sau một câu trả lời = chưa hiểu → giải thích lại (commit `5b5b1fb`) | Câu cụt sau câu trả lời bị coi là câu mơ hồ đầu phiên, hỏi lại thay vì giảng lại |
+| 28/11 09:47 | `codebase/agent.py`: "ok / hiểu rồi / cảm ơn" → đáp ngắn, không tra bài (commit `a9c726a`) | Lời xác nhận bị tra bài như một câu hỏi mới |
+| 28/11 | Nga chấm cột `pass` file `run-8` (19/21) | `eval/report.md` §1, §3 |
+| 28/11 12:00 | `codebase/agent.py`: giọng trung tính cho câu trả lời đầu; chạy `run-9` (18/21) | Nhóm thử web: câu trả lời văn hoa mỹ |
+| 28/11 12:15 | `codebase/agent.py`: nhánh giải thích lại không chép phụ đề, cấu trúc ý chính · ví dụ · đối lập · câu tự kiểm tra, đổi góc theo lần, kiểm trùng cụm 5 từ > 30% | Nhóm thử web: bot chép lại phụ đề; B21 run-9 diễn đạt lệch ý |
+| 28/11 12:18 | Chạy `run-10`, chọn làm **lượt 2** (20/21) vì chạy trên đúng code demo; `simulate-2` theo tỉ lệ đạt run-10 | `eval/report.md` §1, `cost/cost-estimate.md` |
+| 28/11 12:40 | Thêm `codebase/guard.py` (`check_input`, `check_output`), luật giống bản dự phòng; thêm mẫu "viết giúp … code/bài/lab" | Spec §4 nói có `guard.py` nhưng file chưa tồn tại; câu "viết giúp mình code lab" lọt chặn |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
