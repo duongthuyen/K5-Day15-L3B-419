@@ -40,14 +40,24 @@ Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
 | 1 | `run-1@20261128-011700` | gpt-5.4-nano | Model thật lần đầu; `lessons.csv` bản đầu; agent 2 nhánh (hỏi mới / giải thích lại) như `spec.md` §4 | 14/21 | 67% | Chưa — dưới 75%, và 4/4 câu B18–B21 bị chấm hỏi ngược |
 | 2 | `run-10@20261128-121835` | gpt-5.4-nano | Nhánh giải thích lại: cấm hỏi ngược + kiểm `_check_reexplain`; cấu trúc cố định ý chính · ví dụ · cặp đối lập · câu tự kiểm tra; cấm chép phụ đề + kiểm trùng cụm 5 từ (> 30% → viết lại); đổi góc tiếp cận theo lần "chưa hiểu"; tìm đoạn BM25; code chặn khái niệm ngoài bài; `lessons.csv` tóm tắt, mã theo số ngày BTC | 20/21 | 95% | Đạt — tu_choi 4/4, 0 mã bịa, B18–B21 không hỏi ngược 4/4 *(pass chấm nháp, chờ duyệt)* |
 
-**Các file `run-2` … `run-7` (28/11, 08:00–09:25):** chạy trong lúc sửa `lessons.csv` (tóm tắt lại, đổi mã đoạn theo số ngày BTC) và sửa lỗi `agent.py`; **chưa chấm cột `pass`, không báo cáo là một lượt**. Giữ nguyên file, không xoá.
+**Các bước cải tiến chính** (chỉ để đọc cho gọn — tên file giữ nguyên, không đổi tên / không xoá run nào). Cả 10 run đã chấm nháp cột `pass` (chờ người chấm duyệt). So sánh trực quan: `eval/so-sanh-cac-run.html`.
 
-| File | Run ID | Model | Thay đổi so với file trước (theo commit) |
-|---|---|---|---|
-| `run-2` … `run-6` | `run-2@20261128-080007` … `run-6@20261128-091031` | gpt-5.4-nano | `lessons.csv` tóm tắt + sửa lỗi `agent.py` (commit `9d12937`) |
-| `run-7` | `run-7@20261128-092545` | gpt-5.4-nano | Mã đoạn theo số ngày BTC (D03 = agent, D04 = prompt / tool calling) (commit `e63ee82`, `afccf25`) |
-| `run-8` | `run-8@20261128-094801` | gpt-5.4-nano | Tìm đoạn BM25; cấm hỏi ngược + câu kết cố định "Phần này đã rõ hơn chưa?"; code chặn khái niệm ngoài bài; câu cụt "?" / câu "ok" (commit `9d12937` → `a9c726a`). Nga chấm nháp: **19/21 (90%)**, đạt chuẩn — mốc so sánh, không báo cáo là một lượt |
-| `run-9` | `run-9@20261128-120235` | gpt-5.4-nano | Giọng trung tính, ví dụ đời thường ≤2 câu, vẫn kết bằng "Phần này đã rõ hơn chưa?". Đã chấm nháp: 18/21 (86%) — mốc so sánh ngay trước lượt 2, không báo cáo là một lượt |
+| Bước | File | Run ID | Cải tiến chính | Đạt / tổng | Đạt chuẩn? |
+|---|---|---|---|---|---|
+| 1 | `run-1` | `run-1@20261128-011700` | Bản đầu (= lượt 1) | 14/21 (67%) | Chưa — B18–B21 hỏi ngược 4/4 |
+| 2 | `run-2` | `run-2@20261128-080007` | Hết hỏi ngược khi giải thích lại; `lessons.csv` tóm tắt (commit `9d12937`) | 18/21 (86%) | Đạt |
+| 3 | `run-8` | `run-8@20261128-094801` | Tìm đoạn BM25; code chặn khái niệm ngoài bài; câu cụt "?" / câu "ok" (commit `9d12937` → `a9c726a`) | 19/21 (90%) | Đạt |
+| 4 | `run-10` | `run-10@20261128-121835` | Giải thích lại theo cấu trúc cố định; cấm chép phụ đề (= lượt 2) | 20/21 (95%) | Đạt |
+
+**Các lần chạy trung gian** — chạy trong lúc đang sửa, không báo cáo là một bước, giữ nguyên file làm bằng chứng:
+
+| File | Run ID | Thay đổi (theo commit) | Đạt / tổng | Đạt chuẩn? |
+|---|---|---|---|---|
+| `run-3` … `run-6` | `run-3@20261128-081439` … `run-6@20261128-091031` | Tiếp tục sửa `agent.py` / `lessons.csv`, gộp trong commit `9d12937` (từ lượt 4 thêm code chặn khái niệm ngoài bài) | 19/21 mỗi run (90%) | Đạt |
+| `run-7` | `run-7@20261128-092545` | Mã đoạn theo số ngày BTC (commit `e63ee82`, `afccf25`) | 18/21 (86%) | Chưa — B15 trượt, `tu_choi` 3/4 |
+| `run-9` | `run-9@20261128-120235` | Giọng trung tính, ví dụ đời thường ≤2 câu | 18/21 (86%) | Đạt |
+
+Run-2 … run-6 chấm theo `lessons.csv` bản commit `9d12937` (khi đó D03 = prompt, D04 = agent); run-7 trở đi theo mã BTC hiện tại.
 
 Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, không sửa dòng cũ.
 
