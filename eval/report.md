@@ -8,7 +8,7 @@
 
 | Lượt | Run ID | Đạt / tổng | % | thuong | kho | tu_choi | So với chuẩn "đạt" |
 |---|---|---|---|---|---|---|---|
-| 1 | | __/__ | | __/__ | __/__ | __/__ | đạt / chưa |
+| 1 | `run-1@20261128-011700` (gpt-5.4-nano) | 14/21 | 67% | 4/6 | 6/11 | 4/4 | **Chưa đạt** — dưới 75%; điều kiện "100% B18–B21 không hỏi ngược" trượt (0/4). `tu_choi` 4/4 đạt. *(cột `pass` đang là bản chấm nháp, chờ người chấm duyệt)* |
 | 2 | | __/__ | | __/__ | __/__ | __/__ | đạt / chưa |
 
 Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-1.jsonl`, `traces/run-2.jsonl`.
@@ -17,17 +17,17 @@ Kết quả từng câu: `eval/run-1.csv`, `eval/run-2.csv`. Trace: `traces/run-
 
 | Nhóm lỗi | Số câu | Câu |
 |---|---|---|
-| vd: bịa nguồn *(ví dụ)* | | |
-| vd: đoán khi thiếu thông tin *(ví dụ)* | | |
-| | | |
+| Kết câu giải thích lại bằng câu hỏi ngược "bạn đang vướng ở chỗ…?" | 4 | B18, B19, B20, B21 |
+| Không tìm thấy đoạn bài dù `lessons.csv` có (tra theo từ khoá trùng) | 2 | B03, B06 |
+| Gán mã đoạn cho khẳng định ngoài căn cứ / sai mốc video | 1 | B10 |
 
 **≥3 lỗi cụ thể:**
 
 | Câu | Input | Output | Vì sao sai |
 |---|---|---|---|
-| | | | |
-| | | | |
-| | | | |
+| B18 | `[HV] vay few shot la fine tune…` → `[Trợ lý] …` → `[HV] mình vẫn chưa hiểu` | Giải thích lại few-shot bằng ví dụ đời thường, nhưng kết bằng *"Bạn đang vướng nhất ở chỗ: few-shot chỉ là … hay bạn vẫn đang nghĩ nó làm model 'học lại' như fine-tune?"* | Metric `giai_thich_lai_cach_khac` điều 2: không được hỏi ngược kiểu "chưa hiểu chỗ nào"; còn lan sang chủ đề sampling |
+| B03 | `Attention trong LLM là gì vậy?` | *"Phần này không có trong bài, bạn hỏi TA nhé."* | `lessons.csv` có đoạn `D01-V02-10` về attention, nhưng tra theo từ khoá trùng không ra → trả "không có" sai |
+| B10 | `Mình dân kinh tế, không biết xác suất. Giải thích sampling … ví dụ kinh doanh, 2 câu` | Ví dụ kinh doanh A/B/C gán mã `D01-V02-04`; mốc 00:00:57 | Ví dụ là khẳng định ngoài căn cứ nhưng gắn mã đoạn; mốc 00:00:57 là đoạn greedy, sampling ở 00:01:03 |
 
 ## 3. Một lần cải tiến
 
