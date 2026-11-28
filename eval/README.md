@@ -38,7 +38,7 @@ Dataset nào, xử lý gì: tóm 2–3 dòng từ `data/DATA_CARD.md`.
 | Lượt | Run ID | Model | Cấu hình (prompt / công cụ / thay đổi) | Đạt / tổng | % | Đạt chuẩn? |
 |---|---|---|---|---|---|---|
 | 1 | `run-1@20261128-011700` | gpt-5.4-nano | Model thật lần đầu; `lessons.csv` bản đầu; agent 2 nhánh (hỏi mới / giải thích lại) như `spec.md` §4 | 14/21 | 67% | Chưa — dưới 75%, và 4/4 câu B18–B21 bị chấm hỏi ngược |
-| 2 | | | | __/__ | | |
+| 2 | `run-8@20261128-094801` | gpt-5.4-nano | Tìm đoạn bằng BM25 (thay đếm từ trùng); cấm hỏi ngược + code tự bỏ câu hỏi cuối, kết bằng câu cố định "Phần này đã rõ hơn chưa?"; code chặn khái niệm ngoài bài ("Phần … không có trong bài"); `lessons.csv` tóm tắt, mã đoạn theo BTC; câu cụt "?" / câu "ok" (commit `9d12937` → `a9c726a`) | 19/21 | 90% | Đạt — ≥75%, `tu_choi` 4/4, 0 mã bịa, B18–B21 không hỏi ngược 4/4 *(cột `pass` là bản chấm nháp, chờ người chấm duyệt)* |
 
 **Các file `run-2` … `run-7` (28/11, 08:00–09:25):** chạy trong lúc sửa `lessons.csv` (tóm tắt lại, đổi mã đoạn theo số ngày BTC) và sửa lỗi `agent.py`; **chưa chấm cột `pass`, không báo cáo là một lượt**. Giữ nguyên file, không xoá.
 
@@ -51,4 +51,6 @@ Lượt chạy lại vì lỗi kỹ thuật, lượt sau CP4: ghi thêm dòng, k
 
 ## 6. Lỗi chính
 
-Tóm 2–3 dòng từ `eval/report.md`: nhóm lỗi lớn nhất · đã sửa gì · còn lại gì.
+- **Nhóm lỗi lớn nhất lượt 1:** giải thích lại nhưng kết bằng câu hỏi ngược (4/4 câu B18–B21) — đúng pain chính của lát cắt.
+- **Đã sửa:** cấm hỏi ngược trong prompt + code tự bỏ câu hỏi cuối và thêm câu kết cố định; đổi cách tìm đoạn sang BM25; chặn bằng code khái niệm ngoài bài. Lượt 2: hỏi ngược 4/4 → 0/4, tổng 67% → 90%.
+- **Còn lại:** B10 (ví dụ tự tạo vẫn gắn mã đoạn) chưa sửa; B01 tệ đi do luật né khái niệm ngoài bài làm mất câu "few-shot không phải fine-tune".
