@@ -10,27 +10,27 @@ seed: 42            # giữ cố định để chạy lại ra cùng chuỗi phi
 
 users:              # số người dùng thật nếu đưa vào dùng — 3 kịch bản, ở quy mô thật của sản phẩm
                     # track A: khoá học · track B–F: người dùng của sản phẩm / nhóm nhắm tới, nguồn công khai có link
-  low: 300
-  base: 700
-  high: 1000
-  source: "(ví dụ) track A — thay bằng số của nhóm. Cơ sở: lớp L3 hơn 700 học viên (README hackathon); thấp, cao: (tự ước tính)"
+  low: 143
+  base: 436
+  high: 721
+  source: "thấp = 143 học viên đã hỏi trợ giảng AI trong chat.csv (cost/count_personas.py); cơ sở = 436 học viên có hoạt động, cao = 721 tài khoản (README data pack preclass của BTC, 05/11→25/11/2026). Cơ sở / cao giả định mọi người dùng giống nhóm đã hỏi TA (tự ước tính) → có thể đội chi phí lên"
 
 personas:           # ≥3 kiểu người dùng; share cộng lại = 1
   - name: dung_it
-    share: 0.5              # tỉ lệ người dùng kiểu này
-    uses_per_month: 4       # số phiên / người / tháng
-    turns_per_session: 1    # số lượt hỏi trong một phiên
-    source: "(ví dụ) phỏng vấn P1, P3 — thay bằng nguồn của nhóm"
+    share: 0.52             # tỉ lệ người dùng kiểu này — 75/143 người, dưới 2 phiên / tháng
+    uses_per_month: 1.5     # số phiên / người / tháng
+    turns_per_session: 3    # số lượt hỏi trong một phiên (đo được 2.9)
+    source: "data BTC chat.csv (05/11→25/11/2026): lượt hỏi teaching_assistant, phiên = các lượt cách nhau ≤30 phút (tự chọn); cách đếm + lệnh chạy lại: cost/count_personas.py"
   - name: dung_vua
-    share: 0.3
-    uses_per_month: 10
-    turns_per_session: 3
-    source: "(ví dụ) khảo sát n = 24, câu 3"
+    share: 0.34             # 48/143 người, 2–6 phiên / tháng
+    uses_per_month: 3.6
+    turns_per_session: 3    # đo được 3.5
+    source: "data BTC chat.csv (05/11→25/11/2026): lượt hỏi teaching_assistant, phiên = các lượt cách nhau ≤30 phút (tự chọn); cách đếm + lệnh chạy lại: cost/count_personas.py"
   - name: dung_nhieu
-    share: 0.2
-    uses_per_month: 20
-    turns_per_session: 5
-    source: "(ví dụ) data/preclass: đếm số lượt / người — cách đếm ở evidence/data-mining.md"
+    share: 0.14             # 20/143 người, từ 6 phiên / tháng
+    uses_per_month: 9.4
+    turns_per_session: 4    # đo được 3.8
+    source: "data BTC chat.csv (05/11→25/11/2026): lượt hỏi teaching_assistant, phiên = các lượt cách nhau ≤30 phút (tự chọn); cách đếm + lệnh chạy lại: cost/count_personas.py"
 # Mỗi lượt hỏi lấy ngẫu nhiên một đầu vào trong eval/benchmark.csv (type thuong và kho).
 # Persona hỏi kiểu riêng: thêm vào persona đó
 #     types: [thuong, kho, tu_choi]
@@ -38,14 +38,14 @@ personas:           # ≥3 kiểu người dùng; share cộng lại = 1
 #     inputs: ["câu hỏi kiểu 1", "câu hỏi kiểu 2"]
 
 prices:             # USD / 1 triệu token — chép từ further-reading/model-prices.md của repo đề. ≥2 mức model
-  - model: gemini-3.1-flash-lite
-    input: 0.25
-    output: 1.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
-  - model: gemini-4-hydrogen
-    input: 1.50
-    output: 7.50
-    source: "(ví dụ) https://ai.google.dev/gemini-api/docs/pricing · xem 25/11/2026"
+  - model: gpt-5-nano      # tầng Nhỏ
+    input: 0.05
+    output: 0.40
+    source: "further-reading/model-prices.md (repo đề) · https://developers.openai.com/api/docs/pricing · BTC xem 25/11/2026"
+  - model: gpt-6.1-terra   # tầng Vừa
+    input: 1.00
+    output: 5.00
+    source: "further-reading/model-prices.md (repo đề) · https://developers.openai.com/api/docs/pricing · BTC xem 25/11/2026"
 
 usd_to_vnd:         # tuỳ chọn: điền thì bản tóm tắt in thêm tiền Việt
   rate:

@@ -6,11 +6,18 @@
 
 ## 1. Đầu vào
 
-- **Persona** (`cost/personas.yaml`): ≥3 kiểu — tỉ lệ, số phiên / người / tháng, số lượt hỏi / phiên. Nguồn: __
-- **Số người dùng thật** 3 kịch bản: thấp __ · cơ sở __ · cao __. Nguồn: __
-- **Giá** ≥2 mức model (từ `further-reading/model-prices.md` của repo đề, có link + ngày xem): __ · __
-- **Tỉ lệ đạt** dùng để tính: __/__ (__%) — lượt `run-__` (lượt 2)
-- Đo token trên model __, tính giá model __ và __
+- **Persona** (`cost/personas.yaml`): 3 kiểu, đếm từ `chat.csv` của BTC (05/11 → 25/11/2026, 19,7 ngày, quy ra tháng × 1,524). Tập đếm: 1.096 lượt học viên hỏi trợ giảng AI (`addressed_agent_id = teaching_assistant`) của 143 học viên. Phiên = các lượt của cùng học viên cách nhau ≤ 30 phút *(ngưỡng tự chọn, vì `session_id` gần như trống)* → 313 phiên, trung bình 3,5 lượt / phiên. Cách đếm chạy lại được: `python cost/count_personas.py <đường dẫn chat.csv>`.
+
+  | Persona | Ngưỡng | Người | Share | Phiên / người / tháng | Lượt / phiên (đo → dùng) |
+  |---|---|---|---|---|---|
+  | `dung_it` | < 2 phiên / tháng | 75/143 | 0,52 | 1,5 | 2,9 → 3 |
+  | `dung_vua` | 2–6 phiên / tháng | 48/143 | 0,34 | 3,6 | 3,5 → 3 |
+  | `dung_nhieu` | ≥ 6 phiên / tháng | 20/143 | 0,14 | 9,4 | 3,8 → 4 |
+
+- **Số người dùng thật** 3 kịch bản: thấp **143** · cơ sở **436** · cao **721**. Nguồn: thấp = số học viên đã hỏi trợ giảng AI (`chat.csv`); cơ sở = học viên có hoạt động, cao = số tài khoản (README data pack `preclass` của BTC). Cơ sở / cao giả định mọi học viên dùng giống nhóm đã hỏi TA *(tự ước tính — có thể đội chi phí lên)*.
+- **Giá** 2 mức model (`further-reading/model-prices.md` của repo đề, https://developers.openai.com/api/docs/pricing, BTC xem 25/11/2026): `gpt-5-nano` (Nhỏ) vào 0,05 · ra 0,40 USD / 1M token · `gpt-6.1-terra` (Vừa) vào 1,00 · ra 5,00 USD / 1M token
+- **Tỉ lệ đạt** dùng để tính: __/__ (__%) — lượt `run-__` *(chờ chấm cột `pass`)*
+- Đo token trên model **`gpt-5.4-nano`** (model nhóm dùng khi chạy eval; không có trong bảng giá của đề), tính giá model **`gpt-5-nano`** và **`gpt-6.1-terra`** — khác model thì bộ tách token có thể khác, số token thật có thể lệch
 
 ## 2. Kết quả mô phỏng
 

@@ -8,15 +8,15 @@
 | | |
 |---|---|
 | Dùng để làm gì | Nguồn duy nhất cho công cụ `search_lesson` (căn cứ để AI trả lời) · nguồn mã đoạn để chấm metric `trich_ma_doan_hop_le` và `khong_tra_loi_ngoai_bai` |
-| Từ đâu | Tài liệu khoá: lời giảng video pre-class trên preclass-online.com, **nhóm chép tay / tóm lại từng đoạn ngắn**, không chép nguyên bài |
-| Xử lý những bước gì | Chia video thành đoạn 30–90 giây theo ý · mỗi đoạn tóm 1–3 câu bằng lời của bài · gắn mã `DNN-VNN-NN` (ngày – video – đoạn, khớp tên transcript `dNN-rX-vNN` trong `data/preclass/chat.csv`) + mốc thời gian · người thứ hai mở video đối chiếu từng đoạn |
+| Từ đâu | Tài liệu khoá: lời giảng video pre-class trên preclass-online.com, lấy từ file transcript có mốc thời gian `preclass_transcripts.txt` (nguồn file: __; **không commit** file này) · mỗi đoạn là **bản tóm tắt 1–3 câu bằng lời của nhóm**, giữ thuật ngữ và ví dụ chính của bài; không chép nguyên văn lời giảng (track A: "trích ngắn hoặc viết lại, không commit nguyên tài liệu khoá") |
+| Xử lý những bước gì | Chép từng dòng transcript (538 dòng) · bỏ 17 dòng chào hỏi / chuyển phần ("Chào bạn, Yorn đây", "Bạn có thể bôi đen câu gợi ý…") · gộp các dòng liền nhau trong cùng video thành đoạn ~30–60 giây, cắt ở chỗ chuyển ý ("Thử nhé", "Tóm lại", "Giờ mình…") · viết lại mỗi đoạn thành 1–3 câu tóm tắt (giữ thuật ngữ như token, sampling, few-shot, ReAct… và ví dụ của bài như ShopBot, chữ "đá"); kiểm: cụm trùng nguyên văn dài nhất với lời bài là 16 từ, tổng độ dài còn 38% bản chép · gắn mã `DNN-VNN-NN` (ngày – video – đoạn) + mốc `bắt đầu - kết thúc` · người thứ hai mở video đối chiếu từng đoạn: __ |
 | Cột | `ma_doan`, `video`, `moc_thoi_gian`, `noi_dung` |
-| Chọn bài nào | Ưu tiên **Day01** (AI & LLM Foundation) vì có nhiều câu hỏi dưới video nhất: **376/1.259 (29,9%)** lượt chat có gắn transcript trong `data/preclass/chat.csv`; 3 video nhiều câu hỏi nhất đều thuộc Day01 (`d01-r1-v02` 133, `d01-r1-v01` 102, `d01-r1-v05` 68). Thêm bài "Kỹ thuật prompt nâng cao" vì là bài người thử A dùng trong `evidence/snoop-observation.md` |
-| Số dòng / số đoạn | **Chưa có** — mục tiêu ≥15 đoạn ở CP2, đủ để phủ chủ đề trong `eval/benchmark.csv` (few-shot, CoT, ReAct, attention, sampling, temperature, token) |
-| Phiên bản / ngày lấy | __ (ghi ngày chép, phiên bản bài giảng nếu trang có ghi) |
-| Nhãn | thật (trích / tóm lại từ tài liệu khoá) |
+| Chọn bài nào | Ưu tiên **Day01** (AI & LLM Foundation) vì có nhiều câu hỏi dưới video nhất: **376/1.259 (29,9%)** lượt chat có gắn transcript trong `data/preclass/chat.csv`; 3 video nhiều câu hỏi nhất đều thuộc Day01 (`d01-r1-v02` 133, `d01-r1-v01` 102, `d01-r1-v05` 68). Thêm bài "Kỹ thuật prompt nâng cao" vì là bài người thử A dùng trong `evidence/snoop-observation.md`. Lấy trọn Ngày 1–4 (không lọc video theo câu thử) để không làm đẹp kết quả eval; lý do chọn đến Ngày 4: __ |
+| Số dòng / số đoạn | **101 đoạn** (15–68 giây, trung vị 52 giây) · Ngày 1–4, đủ mọi video của 4 ngày · chọn theo ngày học, **không** chọn theo câu thử |
+| Phiên bản / ngày lấy | v3 · 28/11/2026 — tóm tắt lại từng đoạn (v2 cùng ngày là bản chép nguyên văn gộp đoạn, đã thay; v1 là 10 đoạn chép tay) |
+| Nhãn | thật (tóm tắt lại từ tài liệu khoá, không phải lời bài nguyên văn) |
 | Người chép · người kiểm | __ · __ |
-| Giới hạn | Chỉ phủ vài video, câu hỏi về bài khác sẽ ra "không có trong bài" · tóm lại bằng tay nên có thể sót ý hoặc lệch câu chữ bài · tra theo từ khoá nên câu hỏi dùng từ khác bài (vd "mảnh từ" thay cho "token") có thể không tìm thấy |
+| Giới hạn | **Thư mục `Day03` / `Day04` trong transcript bị đảo** so với thứ tự ngày học: mã `D03-…` (bài prompt) = file `Day04/d04-r3-v…`, mã `D04-…` (bài agent) = file `Day03/d03-r2-v…`; mã trong file này theo thứ tự ngày học trên trang · bài không nói "few-shot khác fine-tune" (B01, B18, B20 đòi ý này) · chỉ phủ Ngày 1–4, câu hỏi về bài khác sẽ ra "không có trong bài" · tóm lại nên có thể sót ý hoặc lệch câu chữ bài — câu trả lời của agent trích theo bản tóm tắt, không theo lời giảng gốc · tra theo từ khoá nên câu hỏi dùng từ khác bài (vd "mảnh từ" thay cho "token") có thể không tìm thấy |
 
 **Dự phòng khi chưa có file:** `codebase/agent.py` dùng 3 đoạn **`synthetic`** mã `D00-…` (nhóm tự viết, nhãn `[giả]`, không phải lời bài) để `python run.py` chạy hết luồng. Trace ghi `dự phòng: … dùng 3 đoạn GIẢ`. Không dùng các đoạn này để báo kết quả eval.
 

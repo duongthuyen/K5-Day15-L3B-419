@@ -40,3 +40,5 @@ data/preclass/*
 !data/preclass/README.md
 data/training-ops/*
 !data/training-ops/README.md
+# Transcript pre-class nguyên bài: chỉ dùng để chép vào lessons.csv, không commit
+data/preclass_transcripts.txt
