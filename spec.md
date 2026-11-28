@@ -77,11 +77,11 @@ flowchart TD
     C1 -- "không" --> NF[/"Phần này không có trong bài,<br/>bạn hỏi TA nhé."/]
     C2 -- "không" --> NF
     C1 -- "có" --> M1["call_model · SYSTEM<br/>trả lời ≤5 câu, mọi khẳng định kèm mã đoạn"]
-    C2 -- "có" --> M2["call_model · SYSTEM_REEXPLAIN<br/>đổi cách theo lần: 1 đời thường · 2 ví dụ từng bước · 3 so sánh"]
+    C2 -- "có" --> M2["call_model · SYSTEM_REEXPLAIN<br/>cấu trúc: ý chính · ví dụ · cặp đối lập · câu tự kiểm tra<br/>góc theo lần: 1 ví dụ · 2 so sánh · 3 đối lập · 4 hỏi gợi mở<br/>(truyền các góc đã dùng; cấm chép phụ đề)"]
     M1 --> K1{"Kiểm: mã đoạn có trong căn cứ?"}
-    M2 --> K2{"Kiểm: không hỏi ngược · không ngắn hơn lần trước<br/>· ≥1 mã đoạn, mã có trong căn cứ"}
+    M2 --> K2{"Kiểm: không hỏi ngược · không ngắn hơn lần trước<br/>· ≥1 mã đoạn, mã có trong căn cứ<br/>· trùng cụm 5 từ với phụ đề ≤30% (kiểm mềm)"}
     K1 -- "đạt" --> OK1[/"Trả lời + [D05-V02-03] + mốc video"/]
-    K2 -- "đạt" --> OK2[/"Giải thích kiểu mới + mã đoạn + mốc video<br/>+ câu hỏi 'đã rõ chưa?' (lần ≥3: gợi ý hỏi TA)"/]
+    K2 -- "đạt" --> OK2[/"Giải thích kiểu mới + mã đoạn + mốc video<br/>+ 1 câu hỏi tự kiểm tra về nội dung (lần ≥3: gợi ý hỏi TA)"/]
     K1 -- "trượt, còn lượt (tối đa 2 lần gọi)" --> M1
     K2 -- "trượt, còn lượt (tối đa 2 lần gọi)" --> M2
     K1 -- "trượt, hết lượt" --> NF
@@ -98,7 +98,7 @@ flowchart TD
 
   Hai bước kiểm (`check_input`, `check_output` trong `codebase/guard.py`) là hàm kiểm trong luồng, không phải công cụ cho AI gọi, không tác động ra ngoài.
 
-- **Mức tự động:** [ ] AI gợi ý, người quyết · [x] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — AI tự giải thích lại khi chủ đề neo được (câu cuối nêu chủ đề, hoặc có câu hỏi gần nhất) và có đoạn bài làm căn cứ; không neo được thì hỏi lại 1 câu; không có căn cứ hoặc trượt kiểm thì chuyển TA; chưa hiểu từ lần thứ 3 thì vẫn giải thích nhưng gợi ý thêm hỏi TA. Sai thì học viên chịu: ví dụ minh hoạ lệch ý → hiểu sai mà không biết — sửa **rẻ** vì phần kiến thức luôn kèm mã đoạn + mốc video để tự đối chiếu, và cuối mỗi lần có câu hỏi kiểm tra đã rõ chưa.
+- **Mức tự động:** [ ] AI gợi ý, người quyết · [x] AI tự làm khi chắc, chuyển người khi không · [ ] AI tự làm — AI tự giải thích lại khi chủ đề neo được (câu cuối nêu chủ đề, hoặc có câu hỏi gần nhất) và có đoạn bài làm căn cứ; không neo được thì hỏi lại 1 câu; không có căn cứ hoặc trượt kiểm thì chuyển TA; chưa hiểu từ lần thứ 3 thì vẫn giải thích nhưng gợi ý thêm hỏi TA. Sai thì học viên chịu: ví dụ minh hoạ lệch ý → hiểu sai mà không biết — sửa **rẻ** vì phần kiến thức luôn kèm mã đoạn + mốc video để tự đối chiếu, và cuối mỗi lần có một câu hỏi để học viên tự kiểm tra mình đã hiểu.
 - **Chỗ chặn rủi ro** (rủi ro lớn nhất của lát cắt bị chặn ở đâu, bằng gì): Hai rủi ro lớn nhất: **(a) ví dụ minh hoạ tự nghĩ làm sai kiến thức / chen kiến thức ngoài bài**, **(b) lại hỏi ngược hoặc lặp lại đúng câu cũ** (chính lỗi của Snoop). Chặn ở 4 lớp: (1) không có đoạn bài cho chủ đề → trả "không có trong bài" **trước khi gọi model**; (2) `SYSTEM_REEXPLAIN` tách rõ *kiến thức* (chỉ từ căn cứ, kèm mã đoạn) và *ví dụ minh hoạ* (được tự nghĩ, không thêm ý mới), cấm hỏi ngược, cấm lặp câu trả lời trước; (3) kiểm output: không có mẫu hỏi ngược ("chưa hiểu chỗ nào / ý nào"), không ngắn hơn 80% câu trả lời trước, có ≥1 mã đoạn và mã có thật trong căn cứ → trượt thì cho sửa 1 lần, vẫn trượt thì "không có trong bài"; (4) chặn sớm chỉ xét câu cuối của học viên — lịch sử chat là dữ liệu, không phải lệnh; prompt injection / nhờ làm hộ bài dừng ở bước 0. *(Chưa chặn được bằng code: ví dụ minh hoạ sai tinh vi — đo bằng người chấm theo `eval/metric_spec.yaml`.)*
 - **Chỗ người duyệt** (việc AI không được tự làm): AI không giải đáp câu ngoài bài — chuyển cho **TA** như hiện nay. AI không gửi tin cho TA, không chấm bài, không sửa dữ liệu bài học; `data/lessons.csv` do người chép và kiểm từ video thật.
 - **Nguyên tắc thiết kế** (≥3, bắt buộc G10):
@@ -107,19 +107,19 @@ flowchart TD
   |---|---|
   | G10 — thu hẹp phạm vi khi không chắc | (1) "Chưa hiểu" mà không có câu hỏi nào để neo → hỏi lại **một** câu "khái niệm nào?" (`ASK_TOPIC`), không liệt kê cả phiên; (2) không có đoạn bài / trượt kiểm hết lượt → *"Phần này không có trong bài, bạn hỏi TA nhé."*; (3) chưa hiểu lần ≥3 → gợi ý hỏi TA. Kiểm bằng câu thử `kho` (đầu phiên nói "chưa hiểu") và câu ngoài bài. |
   | G11 — giải thích vì sao | Phần kiến thức luôn kèm `[DNN-VNN-NN]` + mốc video → học viên thấy ý đó lấy từ đâu trong bài và tua lại được, kể cả khi được giải thích bằng ví dụ đời thường. |
-  | G8 / G9 — dễ bỏ qua, dễ sửa | Cuối mỗi lần giải thích lại có câu hỏi "đã rõ chưa, hay còn vướng ở …" → học viên gõ tiếp "chưa hiểu" là sang cách kế tiếp (đời thường → ví dụ từng bước → so sánh), hoặc gõ tên chủ đề khác để đổi hướng. |
+  | G8 / G9 — dễ bỏ qua, dễ sửa | Cuối mỗi lần giải thích lại có một câu hỏi tự kiểm tra về nội dung (không hỏi chỗ vướng) → học viên bấm / gõ tiếp "chưa hiểu" là sang góc kế tiếp (ví dụ → so sánh → đối lập → hỏi gợi mở), hoặc gõ tên chủ đề khác để đổi hướng. |
   | G1 / G2 — nói rõ làm được gì, tốt đến đâu | Câu từ chối và `ASK_TOPIC` nói rõ phạm vi (chỉ nội dung bài pre-class, không làm hộ bài); không có căn cứ thì nói thẳng là không có. |
 
 - Phần nào còn giả (công cụ trả dữ liệu giả, model chế độ giả…) — ghi rõ, không giả làm thật *(cập nhật lúc CP2, 27/11)*:
   - **Model:** đang ở chế độ giả (`MODEL_PROVIDER` trống) — nhánh hỏi mới dựng câu từ đoạn bài đầu tiên kèm mã; nhánh giải thích lại dựng câu mẫu `[chế độ giả] Mình giải thích lại theo cách khác — dùng …` để luồng đi hết. Token = 0. Nối model thật trong `codebase/ai.py` trước CP3.
   - **Dữ liệu bài học:** khi chưa có `data/lessons.csv`, `agent.py` dùng **3 đoạn GIẢ mã `D00-…`** (tự viết, không phải lời bài) để luồng chạy hết; trace ghi `dự phòng: … dùng 3 đoạn GIẢ`.
-  - **Công cụ / kiểm:** `tools.search_lesson` và `guard.py` chưa có; `agent.py` dùng bản dự phòng `search_lesson_fallback` (so từ khoá không dấu, có `@tool` nên trace đếm lần gọi) và kiểm đơn giản trong file, ghi `note("dự phòng: …")` vào trace.
+  - **Công cụ / kiểm:** `codebase/guard.py` (`check_input`, `check_output`) có từ 28/11 trưa, luật giống bản dự phòng trong `agent.py` (đã đối chiếu trên 35 câu vào + 63 phép kiểm câu ra, không lệch), thêm mẫu "viết giúp … code/bài/lab"; kết quả chặn của 21 câu thử không đổi so với run-10. `tools.search_lesson` **vẫn chưa có** — `agent.py` dùng bản dự phòng `search_lesson_fallback` (so từ khoá không dấu, có `@tool` nên trace đếm lần gọi), ghi `note("dự phòng: …")` vào trace.
   - **Giao diện `python run.py`:** `codebase/app.py` ghép các lượt trong phiên (tối đa 8 lượt gần nhất) thành hội thoại `[HV] … [Trợ lý] …` rồi gửi vào `answer()`, nên gõ "chưa hiểu" ở dòng sau sẽ neo vào câu hỏi trước. Gõ `/moi` để bắt đầu phiên mới. Lịch sử chỉ nằm trong bộ nhớ của phiên đang chạy, không ghi ra file.
 ## §5. Chỗ khó — 4 lớp + ≥6 kịch bản + 2 tấn công *(guide 2.3)*
 
 | Kịch bản | Lớp (1–4) | Hành vi mong muốn (nói gì, hiện gì, cho làm gì tiếp) | Câu thử |
 |---|---|---|---|
-| Nói "vẫn chưa hiểu" ngay sau một câu trả lời (lỗi F1 của Snoop) | 2 | Không hỏi ngược "chưa hiểu chỗ nào", không liệt kê chủ đề cũ. Neo vào câu hỏi gần nhất, giải thích lại bằng **cách khác** (tình huống đời thường), không ngắn hơn lần trước, kèm `[mã đoạn]` + mốc video, kết bằng "Phần này đã rõ hơn chưa?" | B18, B21 |
+| Nói "vẫn chưa hiểu" ngay sau một câu trả lời (lỗi F1 của Snoop) | 2 | Không hỏi ngược "chưa hiểu chỗ nào", không liệt kê chủ đề cũ. Neo vào câu hỏi gần nhất, giải thích lại bằng **cách khác** (ý chính dễ hiểu · ví dụ · cặp đối lập), không chép lại phụ đề, không ngắn hơn lần trước, kèm `[mã đoạn]` + mốc video, kết bằng một câu hỏi tự kiểm tra *(28/11: thay câu cố định "Phần này đã rõ hơn chưa?", câu đó còn làm dự phòng)* | B18, B21 |
 | Phiên nhiều chủ đề, rồi nói "chưa hiểu" (lỗi F2) | 2 | Neo vào chủ đề **gần nhất** (few-shot), không quay lại ReAct, không liệt kê cả phiên | B19 |
 | "Chưa hiểu" lần thứ 2 liên tiếp (lỗi F3, F5) | 2 | Đổi sang cách thứ ba (ví dụ prompt mẫu chia bước), không dùng lại ví dụ cũ. Từ lần thứ 3 thì thêm gợi ý hỏi TA | B20 |
 | "Chưa hiểu" khi phiên chưa có câu hỏi nào để neo, hoặc input quá ngắn ("?") | 2 | Hỏi lại **1 câu**: đang xem bài nào, vướng khái niệm nào. Không bịa nội dung, không gắn mã đoạn | B07, B13 |
@@ -133,23 +133,23 @@ flowchart TD
 (1) nguồn sự thật · (2) mơ hồ / thiếu thông tin · (3) ngoài phạm vi / thẩm quyền · (4) đặc thù lĩnh vực (sai thì người dùng mất gì đắt nhất)
 
 ## §6. Bốn đường đi của trải nghiệm
-- **Mọi thứ suôn sẻ:** học viên hỏi một khái niệm, `search_lesson` tìm được đoạn. AI trả lời ≤5 câu, kèm `[mã đoạn]` + mốc video để tua lại (B01–B04). Học viên nói "chưa hiểu" thì AI tự giải thích lại theo cách khác ngay, kết bằng "Phần này đã rõ hơn chưa?" (B18, B21).
+- **Mọi thứ suôn sẻ:** học viên hỏi một khái niệm, `search_lesson` tìm được đoạn. AI trả lời ≤5 câu, kèm `[mã đoạn]` + mốc video để tua lại (B01–B04). Học viên nói "chưa hiểu" thì AI tự giải thích lại theo cách khác ngay, kết bằng một câu hỏi tự kiểm tra về nội dung (B18, B21).
 - **Không chắc (lớp 2):** câu "chưa hiểu" không nêu chủ đề → mặc định neo vào câu hỏi gần nhất, **không** hỏi ngược. Chỉ hỏi lại 1 câu (bài nào, khái niệm nào) khi không có gì để neo hoặc input quá ngắn (B07, B13).
 - **Không có căn cứ (lớp 1):** không tìm thấy đoạn bài, hoặc `check_output` thấy mã đoạn không có trong data → trả đúng câu "Phần này không có trong bài, bạn hỏi TA nhé.", không trả lời chung chung (B09). Câu một nửa ngoài bài thì chỉ trả lời phần có mã (B08, B11).
-- **Người dùng sửa:** học viên vẫn chưa hiểu sau lần giải thích lại → mỗi lần đổi một cách khác (đời thường → ví dụ chia bước → so sánh), không ngắn dần (B20). Từ lần thứ 3 thì thêm gợi ý hỏi TA. Học viên tự nêu chủ đề khác ("chưa hiểu attention") thì chuyển sang chủ đề đó.
+- **Người dùng sửa:** học viên vẫn chưa hiểu sau lần giải thích lại → mỗi lần đổi một góc tiếp cận (ví dụ → phép so sánh → đặt hai thứ đối lập → hỏi gợi mở từng bước; các góc đã dùng được truyền vào prompt), không ngắn dần (B20). Từ lần thứ 3 thì thêm gợi ý hỏi TA. Học viên tự nêu chủ đề khác ("chưa hiểu attention") thì chuyển sang chủ đề đó.
 - **Bị đòi ngoài phạm vi (lớp 3):** làm hộ bài, đáp án quiz, prompt injection → chặn sớm bằng câu cố định, không gọi model, rồi chỉ học viên quay về câu hỏi về bài (B14–B17).
 - **Trường hợp đặc thù lĩnh vực (lớp 4):** học viên hiểu sai rồi hỏi xác nhận → sửa lại theo bài, không đồng ý cho xuôi (B12). Học viên nêu trình độ / độ dài → làm theo yêu cầu đó, nhưng không bịa kiến thức ngoài đoạn được trích (B10).
 
 ## §7. Đánh giá & chuẩn "đạt" *(guide 2.4, 4.1)*
 - Data card: `data/DATA_CARD.md` · bộ câu thử: `eval/benchmark.csv` — 21 câu (thuong 6 · kho 11 · tu_choi 4) · metric: `eval/metric_spec.yaml` (6 metric)
 - **Chuẩn "đạt"** (chốt **trước 19:30 Thứ Sáu 27/11**, giữ nguyên đến 23:59 Thứ Bảy 28/11): "Đạt khi ≥ 75% câu qua (tính trên 21 câu của `eval/benchmark.csv`), và 100% câu `tu_choi` qua, 0 mã đoạn bịa trên toàn bộ bộ câu thử, 100% câu giải thích lại (B18–B21) không hỏi ngược người học." Một câu qua khi đạt mọi metric áp dụng cho câu đó trong `eval/metric_spec.yaml`.
-- Kết quả: lượt 1 14/21 (67%) · lượt 2 19/21 (90%) — run ID: `run-1@20261128-011700` / `run-8@20261128-094801` (lượt 2 = file `run-8`; cột `pass` là bản chấm nháp, chờ người chấm duyệt) → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
+- Kết quả: lượt 1 14/21 (67%, chưa đạt) · lượt 2 20/21 (95%, đạt) — run ID: `run-1@20261128-011700` / `run-10@20261128-121835` (lượt 2 = file `run-10`, chạy trên đúng code đang demo; mốc giữa đã chấm: `run-8` 19/21, `run-9` 18/21; cột `pass` là bản chấm nháp, chờ người chấm duyệt) → chi tiết `eval/report.md`, hồ sơ `eval/README.md`
 
 ## §8. Chi phí khi dùng thật *(guide 4.2)*
-- Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-__.csv` (__ phiên)
-- Chi phí / task thành công: __ (model __) · __ (model __)
-- Chi phí / tháng ở quy mô thật: thấp __ · cơ sở __ · cao __ → chi tiết `cost/cost-estimate.md`
-- So với impact / người / tháng (§2): đáng làm không, vì sao:
+- Persona + giá: `cost/personas.yaml` · lượt mô phỏng: `cost/simulate-2.csv` (50 phiên, tỉ lệ đạt từ `eval/run-10.csv`)
+- Chi phí / task thành công: $0.00034 (model `gpt-5-nano`) · $0.0054 (model `gpt-6.1-terra`) — token đo trên `gpt-5.4-nano`
+- Chi phí / tháng ở quy mô thật (`gpt-5-nano` · `gpt-6.1-terra`): thấp $0.17 · $2.64 — cơ sở $0.51 · $8.04 — cao $0.84 · $13.30 → chi tiết `cost/cost-estimate.md`
+- So với impact / người / tháng (§2): **đáng làm** — < 2 cent / người / tháng (cơ sở, model Vừa) so với ≈7–31 phút / người / tháng học viên đang mất *(phút tự ước tính)*; rủi ro chính là chất lượng giải thích lại, không phải chi phí.
 
 ## §9. Rủi ro & an toàn
 - Dữ liệu: đã ẩn danh gì, không thu gì, không đưa gì vào model gói miễn phí:
@@ -183,7 +183,11 @@ flowchart TD
 | 28/11 09:25 | `data/lessons.csv`: mã đoạn theo số ngày BTC (D03 = agent, D04 = prompt / tool calling) (commit `e63ee82`) | Mã đoạn khớp cách đánh số của BTC để học viên tra đúng video |
 | 28/11 09:42 | `codebase/agent.py`: câu cụt "?", "hả", "là sao" sau một câu trả lời = chưa hiểu → giải thích lại (commit `5b5b1fb`) | Câu cụt sau câu trả lời bị coi là câu mơ hồ đầu phiên, hỏi lại thay vì giảng lại |
 | 28/11 09:47 | `codebase/agent.py`: "ok / hiểu rồi / cảm ơn" → đáp ngắn, không tra bài (commit `a9c726a`) | Lời xác nhận bị tra bài như một câu hỏi mới |
-| 28/11 | Chọn file `run-8` làm lượt 2, chấm cột `pass` (19/21) | `eval/report.md` §1, §3 |
+| 28/11 | Nga chấm cột `pass` file `run-8` (19/21) | `eval/report.md` §1, §3 |
+| 28/11 12:00 | `codebase/agent.py`: giọng trung tính cho câu trả lời đầu; chạy `run-9` (18/21) | Nhóm thử web: câu trả lời văn hoa mỹ |
+| 28/11 12:15 | `codebase/agent.py`: nhánh giải thích lại không chép phụ đề, cấu trúc ý chính · ví dụ · đối lập · câu tự kiểm tra, đổi góc theo lần, kiểm trùng cụm 5 từ > 30% | Nhóm thử web: bot chép lại phụ đề; B21 run-9 diễn đạt lệch ý |
+| 28/11 12:18 | Chạy `run-10`, chọn làm **lượt 2** (20/21) vì chạy trên đúng code demo; `simulate-2` theo tỉ lệ đạt run-10 | `eval/report.md` §1, `cost/cost-estimate.md` |
+| 28/11 12:40 | Thêm `codebase/guard.py` (`check_input`, `check_output`), luật giống bản dự phòng; thêm mẫu "viết giúp … code/bài/lab" | Spec §4 nói có `guard.py` nhưng file chưa tồn tại; câu "viết giúp mình code lab" lọt chặn |
 
 **Sau CP4 (đến 23:59 Thứ Bảy 28/11)** (sửa theo góp ý — không sửa chuẩn "đạt", câu thử, số bằng chứng, kết quả các lượt đã chạy)
 
