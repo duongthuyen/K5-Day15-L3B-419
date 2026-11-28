@@ -1,7 +1,7 @@
 # Báo cáo đánh giá — lượt 1 → một cải tiến → lượt 2
 
 > Điền ở guide bước 4.1. Lượt 1 trước **CP3 10:00 Thứ Bảy 28/11**, lượt 2 trước **CP4 14:30 Thứ Bảy 28/11**, cùng bộ câu thử, cùng cách chấm. Chấm ở rubric R5.
-> Số lấy từ `python run.py score eval/run-1.csv` (và `run-2.csv`) sau khi điền cột `pass`. **Kết quả thấp ghi thật vẫn đủ điểm.**
+> Số lấy từ `python run.py score eval/run-1.csv` (và `run-10.csv` — lượt 2 của nhóm) sau khi điền cột `pass`. **Kết quả thấp ghi thật vẫn đủ điểm.**
 > Không được: sửa chuẩn "đạt", bỏ câu thử trượt, sửa `expected` cho khớp output, sửa kết quả lượt đã chạy.
 
 ## 1. Kết quả
@@ -13,7 +13,16 @@
 
 Kết quả từng câu: `eval/run-1.csv`, `eval/run-10.csv`. Trace: `traces/run-1.jsonl`, `traces/run-10.jsonl`.
 
-> Lượt 2 là file `run-10` — chạy trên đúng code đang demo, cùng bộ 21 câu, cùng cách chấm với lượt 1. `run-2` … `run-7` là các lần chạy trong lúc sửa, không chấm. Hai mốc giữa đã chấm nháp, giữ để so sánh, không báo cáo là một lượt (xem `eval/README.md` §5): `run-8@20261128-094801` **19/21 (90%)** (Nga chấm, trượt B01, B10) và `run-9@20261128-120235` **18/21 (86%)** (trượt B01, B10, B21) — cả hai chạy trước sửa 4 ở mục 3.
+> Lượt 2 là file `run-10` — chạy trên đúng code đang demo, cùng bộ 21 câu, cùng cách chấm với lượt 1; chọn vì là bản demo, không phải vì điểm cao nhất. Các run khác **đã chấm nháp**, giữ làm mốc so sánh, không báo cáo là một lượt (xem `eval/README.md` §5):
+>
+> | Bước cải tiến chính | Run ID | Đạt / tổng |
+> |---|---|---|
+> | Bản đầu (= lượt 1) | `run-1@20261128-011700` | 14/21 (67%) |
+> | Hết hỏi ngược khi giải thích lại; `lessons.csv` tóm tắt | `run-2@20261128-080007` | 18/21 (86%) |
+> | Tìm đoạn BM25; chặn khái niệm ngoài bài; câu cụt "?" / câu "ok" | `run-8@20261128-094801` | 19/21 (90%) — trượt B01, B10 |
+> | Cấu trúc cố định; cấm chép phụ đề (= lượt 2) | `run-10@20261128-121835` | 20/21 (95%) — trượt B10 |
+>
+> Lần chạy trung gian: `run-3` … `run-6` 19/21 mỗi run · `run-7` 18/21 (B15 trượt, `tu_choi` 3/4) · `run-9@20261128-120235` 18/21 (trượt B01, B10, B21).
 
 Theo metric (lượt 2, `run-10`): `giai_thich_lai_cach_khac` 4/4 · `trich_ma_doan_hop_le` 6/6 câu `thuong`, 0 mã bịa · `noi_dung_khop_bai` 13/14 (trượt B10), B12 không bị xác nhận · `khong_tra_loi_ngoai_bai` 3/3 (B11 lần này nói rõ "BPE không có trong bài") · `hoi_lai_khi_mo_ho` 2/2 (B07 cận biên: có gợi ý "vd: few-shot, attention", chấm chặt thì 1/2) · `tu_choi_dung` 4/4.
 
