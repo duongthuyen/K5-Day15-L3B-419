@@ -18,19 +18,19 @@ users:              # số người dùng thật nếu đưa vào dùng — 3 k�
 personas:           # ≥3 kiểu người dùng; share cộng lại = 1
   - name: dung_it
     share: 0.52             # tỉ lệ người dùng kiểu này — 75/143 người, dưới 2 phiên / tháng
-    uses_per_month: 1.5     # số phiên / người / tháng
+    uses_per_month: 1.4     # số phiên / người / tháng
     turns_per_session: 3    # số lượt hỏi trong một phiên (đo được 2.9)
-    source: "data BTC chat.csv (05/11→25/11/2026): lượt hỏi teaching_assistant, phiên = các lượt cách nhau ≤30 phút (tự chọn); cách đếm + lệnh chạy lại: cost/count_personas.py"
+    source: "data BTC chat.csv (05/11→25/11/2026, 21 ngày): 1.090 lượt hỏi trợ giảng dưới video — cùng tập với evidence/data-mining.md và spec §2; phiên = các lượt cách nhau ≤30 phút (tự chọn); chạy lại: cost/count_personas.py"
   - name: dung_vua
-    share: 0.34             # 48/143 người, 2–6 phiên / tháng
-    uses_per_month: 3.6
-    turns_per_session: 3    # đo được 3.5
-    source: "data BTC chat.csv (05/11→25/11/2026): lượt hỏi teaching_assistant, phiên = các lượt cách nhau ≤30 phút (tự chọn); cách đếm + lệnh chạy lại: cost/count_personas.py"
+    share: 0.40             # 57/143 người, 2–6 phiên / tháng
+    uses_per_month: 3.8
+    turns_per_session: 4    # đo được 3.7
+    source: "data BTC chat.csv (05/11→25/11/2026, 21 ngày): 1.090 lượt hỏi trợ giảng dưới video — cùng tập với evidence/data-mining.md và spec §2; phiên = các lượt cách nhau ≤30 phút (tự chọn); chạy lại: cost/count_personas.py"
   - name: dung_nhieu
-    share: 0.14             # 20/143 người, từ 6 phiên / tháng
-    uses_per_month: 9.4
-    turns_per_session: 4    # đo được 3.8
-    source: "data BTC chat.csv (05/11→25/11/2026): lượt hỏi teaching_assistant, phiên = các lượt cách nhau ≤30 phút (tự chọn); cách đếm + lệnh chạy lại: cost/count_personas.py"
+    share: 0.08             # 11/143 người, từ 6 phiên / tháng
+    uses_per_month: 11.3
+    turns_per_session: 4    # đo được 3.7
+    source: "data BTC chat.csv (05/11→25/11/2026, 21 ngày): 1.090 lượt hỏi trợ giảng dưới video — cùng tập với evidence/data-mining.md và spec §2; phiên = các lượt cách nhau ≤30 phút (tự chọn); chạy lại: cost/count_personas.py"
 # Mỗi lượt hỏi lấy ngẫu nhiên một đầu vào trong eval/benchmark.csv (type thuong và kho).
 # Persona hỏi kiểu riêng: thêm vào persona đó
 #     types: [thuong, kho, tu_choi]

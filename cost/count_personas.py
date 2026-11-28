@@ -4,10 +4,9 @@ Chạy:  python cost/count_personas.py <đường dẫn tới chat.csv>
        (file data BTC không nằm trong repo này — để ở data-btc/ ngoài repo, không commit)
 
 Cách đếm (viết trước khi chạy):
-- Tập: các lượt trong chat.csv có addressed_agent_id = teaching_assistant (học viên hỏi trợ giảng AI —
-  đúng việc agent của nhóm làm). Bỏ lượt nhắn bạn học AI (classmate_*).
-- Khoảng thời gian: từ lượt đầu tới lượt cuối trong file (05/11 → 25/11/2026, ~21 ngày).
-  Quy ra tháng: × 30 / số ngày.
+- Tập: GIỐNG evidence/data-mining.md (Nga) để số khớp spec §2 — lượt hỏi trợ giảng dưới video:
+  channel = video_question, kind = question, agent_id = addressed_agent_id = teaching_assistant, có transcript.
+- Khoảng thời gian: 05/11 → 25/11/2026 = 21 ngày (giống spec §2). Quy ra tháng: × 30 / 21.
 - Phiên: cột session_id gần như trống, nên tự gom: hai lượt liên tiếp của cùng học viên cách nhau
   ≤ 30 phút thì cùng một phiên (ngưỡng 30 phút là tự chọn).
 - Persona: chia học viên đã hỏi TA thành 3 nhóm theo số phiên / tháng (ngưỡng ở SEGMENTS);
@@ -20,17 +19,20 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 
 GAP = timedelta(minutes=30)
+DAYS = 21   # 05/11 → 25/11/2026, như spec §2
 SEGMENTS = [("dung_it", 0, 2), ("dung_vua", 2, 6), ("dung_nhieu", 6, 10 ** 9)]   # [từ, dưới) phiên / tháng
 
 
 def main(path):
     with open(path, encoding="utf-8-sig", newline="") as f:
-        rows = [r for r in csv.DictReader(f) if r["addressed_agent_id"] == "teaching_assistant"]
+        rows = [r for r in csv.DictReader(f)
+                if r["channel"] == "video_question" and r["kind"] == "question"
+                and r["agent_id"] == r["addressed_agent_id"] == "teaching_assistant" and r["transcript"]]
     times = defaultdict(list)
     for r in rows:
         times[r["hv"]].append(datetime.fromisoformat(r["asked_at"]))
     all_t = [t for ts in times.values() for t in ts]
-    days = (max(all_t) - min(all_t)).total_seconds() / 86400
+    days = DAYS
     per_month = 30 / days
 
     learners = {}
