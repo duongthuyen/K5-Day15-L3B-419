@@ -16,27 +16,31 @@
 
 - **Số người dùng thật** 3 kịch bản: thấp **143** · cơ sở **436** · cao **721**. Nguồn: thấp = số học viên đã hỏi trợ giảng AI (`chat.csv`); cơ sở = học viên có hoạt động, cao = số tài khoản (README data pack `preclass` của BTC). Cơ sở / cao giả định mọi học viên dùng giống nhóm đã hỏi TA *(tự ước tính — có thể đội chi phí lên)*.
 - **Giá** 2 mức model (`further-reading/model-prices.md` của repo đề, https://developers.openai.com/api/docs/pricing, BTC xem 25/11/2026): `gpt-5-nano` (Nhỏ) vào 0,05 · ra 0,40 USD / 1M token · `gpt-6.1-terra` (Vừa) vào 1,00 · ra 5,00 USD / 1M token
-- **Tỉ lệ đạt** dùng để tính: __/__ (__%) — lượt `run-__` *(chờ chấm cột `pass`)*
+- **Tỉ lệ đạt** dùng để tính: 20/21 (95%) — lượt `run-10@20261128-121835` (lượt 2, `eval/report.md`) *(cột `pass` là bản chấm nháp, chờ người chấm duyệt)*
 - Đo token trên model **`gpt-5.4-nano`** (model nhóm dùng khi chạy eval; không có trong bảng giá của đề), tính giá model **`gpt-5-nano`** và **`gpt-6.1-terra`** — khác model thì bộ tách token có thể khác, số token thật có thể lệch
 
 ## 2. Kết quả mô phỏng
 
-Lượt mô phỏng: `cost/simulate-__.csv` · run ID __ · __ phiên · seed __
+Lượt mô phỏng: `cost/simulate-2.csv` · run ID `simulate-2@20261128-121947` · 50 phiên (0 lỗi) · seed 42 · lệnh `python run.py simulate --rate-from eval/run-10.csv` *(`simulate-1` chạy với run-9 trước khi đổi cấu trúc giải thích lại — không dùng)*
 
-*(dán bảng từ `cost/simulate-N-summary.md`)*
+| Persona | Số phiên mô phỏng | Lượt hỏi / phiên | Token vào / phiên | Token ra / phiên | Gọi model / phiên | Gọi công cụ / phiên |
+|---|---:|---:|---:|---:|---:|---:|
+| dung_it | 29 | 3 | 2508 | 364 | 2.7 | 2.6 |
+| dung_vua | 17 | 4 | 3395 | 523 | 3.6 | 3.5 |
+| dung_nhieu | 4 | 4 | 3938 | 574 | 3.8 | 3.8 |
 
 | Model | Chi phí / phiên | Chi phí / task thành công | / tháng — thấp | / tháng — cơ sở | / tháng — cao | / người / tháng (cơ sở) |
 |---|---|---|---|---|---|---|
-| | | | | | | |
-| | | | | | | |
+| `gpt-5-nano` (vào 0,05 · ra 0,40 $/1M) | $0.00032 | $0.00034 | $0.1658 | $0.5054 | $0.8357 | $0.0012 |
+| `gpt-6.1-terra` (vào 1,00 · ra 5,00 $/1M) | $0.0051 | $0.0054 | $2.64 | $8.04 | $13.30 | $0.0184 |
 
 Chi phí / task thành công = chi phí trung bình mỗi phiên ÷ tỉ lệ đạt — **không coi như đạt 100%**.
 
 ## 3. So với impact
 
-- Impact / người / tháng (`spec.md` §2): __
-- Chi phí / người / tháng (cơ sở, model __): __
-- **Kết luận một dòng — đáng làm không:** __
+- Impact / người / tháng (`spec.md` §2): ≈11 giờ / 94 người ≈ **7 phút / người / tháng** (cận dưới) · ≈49 giờ / 94 người ≈ 31 phút (cận trên) — số phút mỗi lần là *(tự ước tính)*
+- Chi phí / người / tháng (cơ sở, model `gpt-5-nano`): **$0.0012** · model `gpt-6.1-terra`: $0.0184
+- **Kết luận một dòng — đáng làm không:** đáng làm — kể cả model Vừa, mức cơ sở 436 người chỉ ≈ $8,0 / tháng (< 2 cent / người) để gỡ ≈7–31 phút bối rối / người / tháng; chi phí thật nằm ở giờ công duyệt chất lượng câu giải thích lại (B10, B21), không ở token.
 
 ## 4. *(Muốn sâu hơn, không bắt buộc)*
 
